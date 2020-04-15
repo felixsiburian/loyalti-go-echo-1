@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-
 	"github.com/radyatamaa/loyalti-go-echo/src/router"
 	//"github.com/spf13/viper"
 )

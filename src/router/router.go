@@ -2,13 +2,10 @@ package router
 
 import (
 	"fmt"
+
 	"github.com/labstack/echo"
 	"github.com/radyatamaa/loyalti-go-echo/src/api"
 	"github.com/radyatamaa/loyalti-go-echo/src/api/UploadToBlob"
-
-	//"github.com/radyatamaa/loyalti-go-echo/src/api/uploadToAzure"
-	"github.com/radyatamaa/loyalti-go-echo/src/api/host"
-	//"github.com/radyatamaa/loyalti-go-echo/src/api/SendGrid"
 	"github.com/radyatamaa/loyalti-go-echo/src/api/apiKafka/Card"
 	"github.com/radyatamaa/loyalti-go-echo/src/api/apiKafka/Employee"
 	"github.com/radyatamaa/loyalti-go-echo/src/api/apiKafka/Merchant"
@@ -19,13 +16,15 @@ import (
 	"github.com/radyatamaa/loyalti-go-echo/src/api/apiKafka/TransactionMerchant"
 	"github.com/radyatamaa/loyalti-go-echo/src/api/apiKafka/Voucher"
 	"github.com/radyatamaa/loyalti-go-echo/src/api/fcm"
+	"github.com/radyatamaa/loyalti-go-echo/src/api/host"
 
 	//"github.com/radyatamaa/loyalti-go-echo/src/api/fcm"
 
 	//"github.com/radyatamaa/loyalti-go-echo/src/api/fcm"
+	"net/http"
+
 	"github.com/radyatamaa/loyalti-go-echo/src/api/getToken"
 	"github.com/radyatamaa/loyalti-go-echo/src/api/middlewares"
-	"net/http"
 )
 
 func New() *echo.Echo {
@@ -127,4 +126,3 @@ func New() *echo.Echo {
 func Ping(c echo.Context) error {
 	return c.String(http.StatusOK, "Hello, World!")
 }
-

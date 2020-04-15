@@ -5,17 +5,17 @@ import (
 	"fmt"
 	"github.com/Azure/azure-storage-blob-go/azblob"
 	"github.com/gofrs/uuid"
+	"github.com/spf13/viper"
 	"net/url"
-	"os"
 	"time"
 )
 
 func GetAccountInfo()(string, string, string, string){
-	azrKey := os.Getenv("azrKey")
+	azrKey := fmt.Sprintf("%s",viper.Get("AZRKEY"))
 	fmt.Println("azrKey : ", azrKey)
-	azrBlobAccountName := os.Getenv("azrBlobAccountName")
+	azrBlobAccountName := fmt.Sprintf("%s",viper.Get("AZRACCOUNTNAME"))
 	fmt.Println("azrAccount : ", azrBlobAccountName)
-	azrBlobContainer := os.Getenv("azrBlobContainer")
+	azrBlobContainer := fmt.Sprintf("%s",viper.Get("AZRBLOBCONTAINER"))
 	fmt.Println("azrContainer : ", azrBlobContainer)
 	azrPrimaryBlobServiceEndpoint := fmt.Sprintf("https://%s.blob.core.windows.net/", azrBlobAccountName)
 	fmt.Println(azrPrimaryBlobServiceEndpoint)

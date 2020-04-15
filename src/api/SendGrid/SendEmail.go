@@ -3,6 +3,8 @@ package SendGrid
 import (
 	//"encoding/json"
 	"fmt"
+	"github.com/spf13/viper"
+
 	//"github.com/labstack/echo"
 	"github.com/sendgrid/sendgrid-go"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
@@ -19,7 +21,7 @@ func SendMail(email model.Email) error {
 	//}
 
 	//var e Email
-	var a = "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"
+	var a = fmt.Sprintf("%s", viper.Get("SENDGRIDKEY"))
 
 	from := mail.NewEmail(e.SenderName, e.SenderEmail)
 	subject := e.Subject
