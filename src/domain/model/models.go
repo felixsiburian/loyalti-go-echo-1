@@ -438,3 +438,9 @@ type EmailEmployee struct {
 	TextContent   string `json:"text_content"`
 	EmployeePin   string `json:"employee_pin"`
 }
+
+type Key struct {
+	id int `gorm:"AUTO_INCREMENT;PRIMARY_KEY;NOT NULL"; json:"id"`
+	keyName string `json:"key_name"`
+	key string `json:"key"`
+}

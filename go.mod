@@ -1,3 +1,9 @@
+module github.com/radyatamaa/loyalti-go-echo
+
+go 1.12
+
+require (
+	github.com/Azure/azure-storage-blob-go v0.8.0
 	github.com/DATA-DOG/go-sqlmock v1.4.1
 	github.com/NaySoftware/go-fcm v0.0.0-20190516140123-808e978ddcd2
 	github.com/Shopify/sarama v1.24.1
@@ -17,6 +23,7 @@
 	github.com/pkg/errors v0.8.0
 	github.com/rs/cors v1.7.0
 	github.com/sendgrid/rest v2.4.1+incompatible // indirect
+	github.com/sendgrid/sendgrid-go v3.5.0+incompatible
 	github.com/sirupsen/logrus v1.2.0
 	github.com/stretchr/testify v1.4.0
 	github.com/valyala/fasttemplate v1.1.0 // indirect
@@ -24,3 +31,4 @@
 	golang.org/x/net v0.0.0-20190522155817-f3200d17e092
 	google.golang.org/grpc v1.19.0
 	gopkg.in/yaml.v2 v2.2.4 // indirect
+)
