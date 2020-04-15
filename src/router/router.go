@@ -2,6 +2,7 @@ package router
 
 import (
 	"fmt"
+	"github.com/spf13/viper"
 
 	"github.com/labstack/echo"
 	"github.com/radyatamaa/loyalti-go-echo/src/api"
@@ -113,6 +114,11 @@ func New() *echo.Echo {
 	//Post FCM
 	e.POST("/getFCM", fcm.PushNotification)
 
+	viper.SetConfigFile(".env")
+	err := viper.ReadInConfig()
+	if err != nil {
+		fmt.Println("Error Config : ", err.Error())
+	}
 	//Post Image to Blob
 	fmt.Println("masuk ini")
 	e.POST("/upload", UploadToBlob.ProcessImage)
