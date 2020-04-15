@@ -91,6 +91,7 @@ func CreateEmployee(employee *model.Employee) string{
 	db := database.ConnectionDB()
 	employee.Id = guid.NewString()
 	db.Create(&employee)
+	defer db.Close()
 	return employee.EmployeeEmail
 }
 
@@ -98,6 +99,7 @@ func CreateEmployee(employee *model.Employee) string{
 func UpdateEmployee(employee *model.Employee) string {
 	db := database.ConnectionDB()
 	db.Model(&employee).Where("employee_email = ?", employee.EmployeeEmail).Update(&employee)
+	defer db.Close()
 	return employee.EmployeeEmail
 }
 
@@ -106,6 +108,7 @@ func DeleteEmployee(employee *model.Employee) string {
 	db := database.ConnectionDB()
 	db.Model(&employee).Where("outlet_id = ?", employee.OutletId).Delete(&employee)
 	//db.Model(&employee).Where("employee_email = ?",employee.EmployeeEmail).Update("active", false)
+	defer db.Close()
 	return "berhasil dihapus"
 }
 

@@ -132,6 +132,7 @@ func  CreateMerchant2 (newmerchant *model.NewMerchantCommand) string {
 	}
 	db := database.ConnectionDB()
 	db.Create(&merchant)
+	defer db.Close()
 	return merchant.MerchantEmail
 }
 
@@ -190,6 +191,7 @@ func UpdateMerchant2(newmerchant *model.NewMerchantCommand) string {
 		MerchantGallery:       newmerchant.MerchantGallery,
 	}
 	db.Model(&merchant).Where("merchant_email = ?", merchant.MerchantEmail).Update(&merchant)
+	defer db.Close()
 	return merchant.MerchantEmail
 }
 
@@ -251,6 +253,7 @@ func DeleteMerchant2(newmerchant *model.NewMerchantCommand) string {
 		MerchantGallery:       newmerchant.MerchantGallery,
 	}
 	db.Model(&merchant).Where("merchant_email = ?", merchant.MerchantEmail).Update("active", false)
+	defer db.Close()
 	return "berhasil dihapus"
 }
 
@@ -264,6 +267,7 @@ func GetMerchant(page *int, size *int, sort *int, email *string) []model.Merchan
 	if page == nil && size == nil && sort == nil && email == nil {
 		fmt.Println("masuk 1")
 		db.Model(&merchant).Find(&merchant)
+		defer db.Close()
 	}
 
 	if page != nil && size != nil && sort != nil && email == nil {
@@ -286,6 +290,7 @@ func GetMerchant(page *int, size *int, sort *int, email *string) []model.Merchan
 					OrderBy: []string{"merchant_name asc"},
 				}, &merchant)
 		}
+		defer db.Close()
 	}
 
 	if page != nil && size != nil && sort != nil && email != nil {
@@ -307,14 +312,14 @@ func GetMerchant(page *int, size *int, sort *int, email *string) []model.Merchan
 				OrderBy: []string{"merchant_name asc"},
 			}, &merchant)
 		}
+		defer db.Close()
 	}
 
 	if page == nil && size == nil && sort == nil && email != nil {
 		fmt.Println("masuk 4")
 		db.Model(&merchant).Where("merchant_email =  ?", email).Find(&merchant)
+		defer db.Close()
 	}
-
-
-
+	defer db.Close()
 	return merchant
 }

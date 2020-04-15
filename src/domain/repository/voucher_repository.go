@@ -38,6 +38,7 @@ func CreateVoucher(voucher *model.Voucher) string {
 		ProgramId:                voucher.ProgramId,
 	}
 	db.Create(&newvoucher)
+	defer db.Close()
 	return "voucher berhasil dibuat"
 }
 
@@ -45,6 +46,7 @@ func CreateVoucher(voucher *model.Voucher) string {
 func UpdateVoucher(voucher *model.Voucher) string {
 	db := database.ConnectionDB()
 	db.Model(&voucher).Where("program_id = ? ", voucher.ProgramId).Update(&voucher)
+	defer db.Close()
 	return "Update Berhasil"
 }
 
@@ -56,6 +58,7 @@ func DeleteVoucher(voucher *model.Voucher) string {
 		fmt.Println("error : ", err.Error)
 		db.Model(&voucher).Where("program_id = ?", voucher.ProgramId).Update("is_deleted", true)
 	}
+	defer db.Close()
 	return "berhasil dihapus"
 }
 
@@ -119,7 +122,6 @@ func GetVoucher (page *int, size *int, sort *int, merchant_id *int) []model.Vouc
 				}, &voucher)
 			}
 		}
-
 	db.Close()
 	return voucher
 }

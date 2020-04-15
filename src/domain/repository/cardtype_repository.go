@@ -50,18 +50,21 @@ func CreateCard(card *model.CardType) string{
 	db := database.ConnectionDB()
 	cardObj := *card
 	db.Create(&card)
+	defer db.Close()
 	return cardObj.CardTypeName
 }
 
 func UpdateCard(card *model.CardType) string {
 	db := database.ConnectionDB()
 	db.Model(&card).Where("id = ?", card.Id).Update(&card)
+	defer db.Close()
 	return card.CardTypeName
 }
 
 func DeleteCard(card *model.CardType) string {
 	db := database.ConnectionDB()
 	db.Model(&card).Where("id = ?", card.Id).Update("active", false)
+	defer db.Close()
 	return "berhasil dihapus"
 }
 
@@ -93,6 +96,6 @@ func GetCardType(page *int, size *int, sort *int) []model.CardType {
 			}
 		}
 	}
-	db.Close()
+	defer db.Close()
 	return card
 }

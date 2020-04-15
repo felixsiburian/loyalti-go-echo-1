@@ -36,18 +36,21 @@ func CreateTransaction(transaction *model.TransactionMerchant) string {
 	db := database.ConnectionDB()
 	transactionObj := *transaction
 	db.Create(&transactionObj)
+	defer db.Close()
 	return transactionObj.BillNumber
 }
 
 func UpdateTransaction(transaction *model.TransactionMerchant) string {
 	db := database.ConnectionDB()
 	db.Model(&transaction).Where("outlet_id = ?", transaction.OutletId).Update(&transaction)
+	defer db.Close()
 	return transaction.OutletId
 }
 
 func DeleteTransaction(transaction *model.TransactionMerchant) string {
 	db := database.ConnectionDB()
 	db.Model(&transaction).Where("outlet_id = ?",transaction.OutletId).Update("active", false)
+	defer db.Close()
 	return "berhasil dihapus"
 }
 

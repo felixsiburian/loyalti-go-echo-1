@@ -79,18 +79,21 @@ func CreateSpecial(special *model.SpecialProgram) string {
 	db := database.ConnectionDB()
 	specialObj := *special
 	db.Create(&specialObj)
+	defer db.Close()
 	return specialObj.ProgramName
 }
 
 func UpdateSpecial(special *model.SpecialProgram) string {
 	db := database.ConnectionDB()
 	db.Model(&special).Where("program_name = ?", special.ProgramName).Update(&special)
+	defer db.Close()
 	return special.ProgramName
 }
 
 func DeleteSpecial(special *model.SpecialProgram) string {
 	db := database.ConnectionDB()
 	db.Model(&special).Where("program_name = ?", special.ProgramName).Update("active", false)
+	defer db.Close()
 	return "berhasil dihapus"
 }
 

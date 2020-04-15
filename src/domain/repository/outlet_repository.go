@@ -101,19 +101,21 @@ func CreateOutlet(outlet *model.Outlet) string {
 	outletObj := *outlet
 
 	db.Create(&outletObj)
-
+	defer db.Close()
 	return outletObj.OutletName
 }
 
 func UpdateOutlet(outlet *model.Outlet) string {
 	db := database.ConnectionDB()
 	db.Model(&outlet).Where("id = ?", outlet.Id).Update(&outlet)
+	defer db.Close()
 	return outlet.OutletName
 }
 
 func DeleteOutlet(outlet *model.Outlet) string {
 	db := database.ConnectionDB()
 	db.Model(&outlet).Where("id= ?", outlet.Id).Update("active", false)
+	defer db.Close()
 	return "berhasil dihapus"
 }
 
@@ -163,5 +165,6 @@ func GetOutlet(page *int, size *int, id *int, email *string) []model.Outlet {
 			OrderBy: []string{"outlet_name asc"},
 		}, &outlet)
 	}
+	defer db.Close()
 	return outlet
 }

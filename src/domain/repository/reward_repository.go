@@ -11,13 +11,14 @@ func CreateReward(reward *model.Reward) string {
 	db := database.ConnectionDB()
 	rewardobj := *reward
 	db.Create(&rewardobj)
-
+	defer db.Close()
 	return "reward berhasil dibuat"
 }
 
 func UpdateReward(reward *model.Reward) string {
 	db := database.ConnectionDB()
 	db.Model(&reward).Where("id = ?", reward.Id).Update(&reward)
+	defer db.Close()
 	return "Update Berhasil"
 }
 
@@ -27,6 +28,7 @@ func DeleteReward(reward *model.Reward) string {
 	if err != nil {
 		db.Model(&reward).Where("id = ?", reward.Id).Update("is_deleted", true)
 	}
+	defer db.Close()
 	return "Berhasil dihapus"
 }
 
@@ -59,5 +61,6 @@ func GetReward(page *int, size *int, sort *int, merchant_email *string) []model.
 			}
 		}
 	}
+	defer db.Close()
 	return reward
 }

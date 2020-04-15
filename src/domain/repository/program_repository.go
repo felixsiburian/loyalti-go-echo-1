@@ -70,6 +70,7 @@ func CreateProgram(program *model.Program) string{
 	db := database.ConnectionDB()
 	programObj := *program
 	db.Create(&programObj)
+	defer db.Close()
 	return programObj.ProgramName
 }
 
@@ -79,12 +80,14 @@ func (p *repoProgram) UpdateProgram  (program *model.Program) error {
 	if err != nil {
 		fmt.Println("Error : ", err.Error())
 	}
+	defer db.Close()
 	return err
 }
 
 func UpdateProgram  (program *model.Program) string {
 	db := database.ConnectionDB()
 	db.Model(&program).Where("id = ?", program.Id).Update(&program)
+	defer db.Close()
 	return "Berhasil diUpdate"
 }
 
@@ -100,6 +103,7 @@ func (p *repoProgram) DeleteProgram(program *model.Program) error {
 func DeleteProgram(program *model.Program) string {
 	db := database.ConnectionDB()
 	db.Model(&program).Where("id= ?", program.Id).Update("active", false)
+	defer db.Close()
 	return "berhasil dihapus"
 }
 
@@ -139,6 +143,7 @@ func TotalPoint(id int, pay int, pin string, outletid string, cardtype string) [
 		fmt.Printf("Customer mendapatkan %d poin \n", total)
 		return updatepoint
 	}
+	defer db.Close()
 	return nil
 }
 
@@ -180,6 +185,7 @@ func TotalChop(id int, pay int, pin string, outletid string, cardtype string) []
 			return updatechop
 		}
 	}
+	defer db.Close()
 	return nil
 }
 
