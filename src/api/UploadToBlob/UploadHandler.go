@@ -5,17 +5,16 @@ import (
 	"fmt"
 	"github.com/Azure/azure-storage-blob-go/azblob"
 	"github.com/gofrs/uuid"
-	"github.com/spf13/viper"
 	"net/url"
 	"time"
 )
 
 func GetAccountInfo()(string, string, string, string){
-	azrKey := fmt.Sprintf("%s",viper.Get("AZRKEY"))
+	azrKey := "194MUKH8BxaH4xasKSVedJgS6mLR6FLVbxVYbZLii13ZI5WnN308xIZBRcHsarw8nn+D5+O3p15r7BdtWHHQTw=="
 	fmt.Println("azrKey : ", azrKey)
-	azrBlobAccountName := fmt.Sprintf("%s",viper.Get("AZRACCOUNTNAME"))
+	azrBlobAccountName := "loyaltiexpress"
 	fmt.Println("azrAccount : ", azrBlobAccountName)
-	azrBlobContainer := fmt.Sprintf("%s",viper.Get("AZRBLOBCONTAINER"))
+	azrBlobContainer := "loyalti-images"
 	fmt.Println("azrContainer : ", azrBlobContainer)
 	azrPrimaryBlobServiceEndpoint := fmt.Sprintf("https://%s.blob.core.windows.net/", azrBlobAccountName)
 	fmt.Println(azrPrimaryBlobServiceEndpoint)
