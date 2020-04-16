@@ -4,7 +4,6 @@ import (
 	//"encoding/json"
 	"fmt"
 	"github.com/radyatamaa/loyalti-go-echo/src/domain/model"
-	"github.com/spf13/viper"
 	//"github.com/labstack/echo"
 	"github.com/sendgrid/sendgrid-go"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
@@ -20,9 +19,9 @@ func SendMail(email *model.Email) error {
 	//}
 
 	//var e Email
-	var a = fmt.Sprintf("%s", viper.Get("SENDGRIDKEY"))
-	fmt.Println(a)
-	//var a = "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"
+	//var a = fmt.Sprintf("%s", viper.Get("SENDGRIDKEY"))
+	//fmt.Println(a)
+	var a = "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"
 	from := mail.NewEmail(e.SenderName, e.SenderEmail)
 	subject := e.Subject
 	for i := range e.Receiver {

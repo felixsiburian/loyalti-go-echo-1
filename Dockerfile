@@ -4,9 +4,7 @@ FROM golang:1.12.8-alpine3.10 as builder
 RUN apk update && apk upgrade && \
     apk --update add git make
 
-#RUN mkdir -p /app
-#WORKDIR /app
-ADD .env .
+WORKDIR /app
 
 COPY . .
 
