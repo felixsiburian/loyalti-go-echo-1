@@ -10,10 +10,10 @@ import (
 	"log"
 )
 
-func PublishSendPinEmployee(c echo.Context) error {
+func PublishSendForgetPassword(c echo.Context) error {
 	fmt.Println("masuk ke send pin")
 	//var data model.Merchant
-	data := new(model.EmailEmployee)
+	data := new(model.EmailForgetPass)
 	err := json.NewDecoder(c.Request().Body).Decode(&data)
 	//err := c.Bind(data)
 	if err != nil {
@@ -46,7 +46,7 @@ func PublishSendPinEmployee(c echo.Context) error {
 		}
 	}()
 
-	var newTopic = "send-pin-topic"
+	var newTopic = "send-password-topic"
 
 	message, _ := json.Marshal(data)
 	//message := `{

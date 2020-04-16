@@ -10,38 +10,42 @@ import (
 )
 
 
-func SendPin(email model.EmailEmployee) error {
+func SendPin(email *model.EmailEmployee) error {
 	fmt.Println("Masuk ke SendGrid")
 	e := email
+	fmt.Println("Email : ", email)
+	fmt.Println("e : ", e)
 	//err := json.NewDecoder(c.Request().Body).Decode(&e)
 	//if err != nil {
 	//	fmt.Println("Error SendGrid : ", err.Error())
 	//}
 
 	//var e Email
-	var a = "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"
+	var a = "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"
 
 	from := mail.NewEmail(e.SenderName, e.SenderEmail)
 	subject := e.Subject
-		fmt.Println("masuk ke perulangan")
-		to := mail.NewEmail(e.EmployeeName, e.EmployeeEmail)
-		plainTextContent := "abcd"
-		htmlContent := "Hi , " + e.EmployeeName + "You've been invited to " + "<b>LoyaltiExpress</b>." + "This is yout PIN : " + e.EmployeePin
-		message := mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
-		client := sendgrid.NewSendClient(a)
-		fmt.Println("isi sendgrid ", a)
-		response, err := client.Send(message)
-		if err != nil {
-			fmt.Println("Error response : ", err.Error())
-		} else {
-			fmt.Println(response.StatusCode)
-			fmt.Println(response.Body)
-			fmt.Println(response.Headers)
-		}
+	fmt.Println("masuk ke perulangan")
+	to := mail.NewEmail(e.EmployeeName, e.EmployeeEmail)
+	fmt.Println("Isi to : ", to)
+	plainTextContent := "abcd"
+	htmlContent := "Hi , " + e.EmployeeName + "You've been invited to " + "<b>LoyaltiExpress</b>." + "This is yout PIN : " + e.EmployeePin
+	fmt.Println("isi HTML Content : ", htmlContent)
+	message := mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
+	client := sendgrid.NewSendClient(a)
+	fmt.Println("isi sendgrid ", a)
+	response, err := client.Send(message)
+	if err != nil {
+		fmt.Println("Error response : ", err.Error())
+	} else {
+		fmt.Println(response.StatusCode)
+		fmt.Println(response.Body)
+		fmt.Println(response.Headers)
+	}
 
-		if err == nil {
-			fmt.Println("mail sent")
-		}
+	if err == nil {
+		fmt.Println("mail sent")
+	}
 	fmt.Println("Selesai Tanpa Error : ", e)
 	return nil
 }

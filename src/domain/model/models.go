@@ -439,8 +439,11 @@ type EmailEmployee struct {
 	EmployeePin   string `json:"employee_pin"`
 }
 
-type Key struct {
-	id      int    `gorm:"AUTO_INCREMENT;PRIMARY_KEY;NOT NULL"; json:"id"`
-	keyName string `json:"key_name"`
-	key     string `json:"key"`
+type EmailForgetPass struct {
+	SenderEmail string           `json:"sender_email"`
+	SenderName  string           `json:"sender_name"`
+	Receiver    []ReceiverStruct `json:"receiver"`
+	Subject     string           `json:"subject"`
+	Body        string           `json:"body"`
+	TextContent string           `json:"text_content"`
 }

@@ -40,6 +40,8 @@ func consumeSendemail(topics []string, master sarama.Consumer) (chan *sarama.Con
 					//*messageCountStart++
 					//Deserialize
 					email := model.Email{}
+					pin := model.EmailEmployee{}
+					forgetpass := model.EmailForgetPass{}
 					switch msg.Topic {
 					case "send-email-topic":
 						fmt.Println("Topic send-email didapatkan")
@@ -56,25 +58,40 @@ func consumeSendemail(topics []string, master sarama.Consumer) (chan *sarama.Con
 						fmt.Println(string(msg.Value))
 						fmt.Println("Email berhasil dikirim")
 						break
-					//case "update-transaction-topic":
-					//	err := json.Unmarshal([]byte(msg.Value), &transaction)
-					//	if err != nil {
-					//		fmt.Println(err.Error())
-					//		os.Exit(1)
-					//	}
-					//	repository.UpdateTransaction(&transaction)
-					//	fmt.Println(string(msg.Value))
-					//	fmt.Println("transaksi berhasil diupdate")
-					//	break
-					//case "delete-transaction-topic":
-					//	err := json.Unmarshal([]byte(msg.Value), &transaction)
-					//	if err != nil {
-					//		fmt.Println(err.Error())
-					//		os.Exit(1)
-					//	}
-					//	repository.DeleteTransaction(&transaction)
-					//	fmt.Println("transaksi berhasil dihapus")
-					//	break
+					case "send-pin-topic":
+						fmt.Println("Topic send-pin didapatkan")
+						err := json.Unmarshal([]byte(msg.Value), &pin)
+						if err != nil {
+							fmt.Println(err.Error())
+							os.Exit(1)
+						}
+						fmt.Println("Isi msg")
+						fmt.Println(string([]byte(msg.Value)))
+						err = SendGrid.SendPin(&pin)
+						if err != nil{
+							fmt.Println("Error : ", err.Error())
+							os.Exit(1)
+						}
+						fmt.Println(string(msg.Value))
+						fmt.Println("Pin berhasil dikirim")
+						break
+					case "send-password-topic":
+						fmt.Println("Topic send-forget-pass didapatkan")
+						err := json.Unmarshal([]byte(msg.Value), &forgetpass)
+						if err != nil {
+							fmt.Println(err.Error())
+							os.Exit(1)
+						}
+						fmt.Println("Isi msg")
+						fmt.Println(string([]byte(msg.Value)))
+						err = SendGrid.SendForgetPass(&forgetpass)
+						if err != nil{
+							fmt.Println("Error : ", err.Error())
+							os.Exit(1)
+						}
+						fmt.Println(string(msg.Value))
+						fmt.Println("Link berhasil dikirim")
+						break
 					}
 				}
 			}

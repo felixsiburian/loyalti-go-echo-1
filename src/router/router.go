@@ -128,6 +128,8 @@ func New() *echo.Echo {
 	//Send Mail SendGrid
 	fmt.Println("mulai kirim email")
 	e.POST("/SendMail", SendEmail.PublishSendEmailCustomer)
+	e.POST("/SendPin", SendEmail.PublishSendPinEmployee)
+	e.POST("/SendForgetPass", SendEmail.PublishSendForgetPassword)
 	fmt.Println("kirim email selesai")
 
 	return e

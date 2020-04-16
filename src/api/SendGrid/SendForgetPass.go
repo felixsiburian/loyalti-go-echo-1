@@ -1,17 +1,17 @@
 package SendGrid
 
 import (
-	//"encoding/json"
-	"fmt"
-	"github.com/radyatamaa/loyalti-go-echo/src/domain/model"
-	//"github.com/labstack/echo"
-	"github.com/sendgrid/sendgrid-go"
-	"github.com/sendgrid/sendgrid-go/helpers/mail"
+//"encoding/json"
+"fmt"
+"github.com/radyatamaa/loyalti-go-echo/src/domain/model"
+//"github.com/labstack/echo"
+"github.com/sendgrid/sendgrid-go"
+"github.com/sendgrid/sendgrid-go/helpers/mail"
 )
 
 
-func SendMail(email *model.Email) error {
-	fmt.Println("Masuk ke SendGrid")
+func SendForgetPass(email *model.EmailForgetPass) error {
+	fmt.Println("Masuk ke SendGrid forget pass")
 	e := email
 	fmt.Println("email : ", email)
 	fmt.Println("e : ", e)
@@ -30,7 +30,8 @@ func SendMail(email *model.Email) error {
 		fmt.Println("masuk ke perulangan")
 		to := mail.NewEmail(e.Receiver[i].Name, e.Receiver[i].Email)
 		plainTextContent := "abcd"
-		htmlContent := e.Body
+		htmlContent := "Don't worry, we got your back!. " + "You can reset your password by clicking on this " +
+			"<a href=https://loyalti-express-dev-ui.azurewebsites.net/resetpassword>Reset Password</a>"
 		message := mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
 		client := sendgrid.NewSendClient(a)
 		fmt.Println("isi sendgrid ", a)
@@ -50,3 +51,4 @@ func SendMail(email *model.Email) error {
 	fmt.Println("Selesai Tanpa Error : ", e)
 	return nil
 }
+
