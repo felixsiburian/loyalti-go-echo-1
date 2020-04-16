@@ -3,16 +3,15 @@ package SendGrid
 import (
 	//"encoding/json"
 	"fmt"
+	"github.com/radyatamaa/loyalti-go-echo/src/domain/model"
 	"github.com/spf13/viper"
-
 	//"github.com/labstack/echo"
 	"github.com/sendgrid/sendgrid-go"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
-	"github.com/radyatamaa/loyalti-go-echo/src/domain/model"
 )
 
 
-func SendMail(email model.Email) error {
+func SendMail(email *model.Email) error {
 	fmt.Println("Masuk ke SendGrid")
 	e := email
 	//err := json.NewDecoder(c.Request().Body).Decode(&e)
@@ -22,7 +21,8 @@ func SendMail(email model.Email) error {
 
 	//var e Email
 	var a = fmt.Sprintf("%s", viper.Get("SENDGRIDKEY"))
-
+	fmt.Println(a)
+	//var a = "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"
 	from := mail.NewEmail(e.SenderName, e.SenderEmail)
 	subject := e.Subject
 	for i := range e.Receiver {

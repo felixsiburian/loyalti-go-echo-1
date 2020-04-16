@@ -7,7 +7,7 @@ import (
 	"github.com/labstack/echo"
 	"github.com/radyatamaa/loyalti-go-echo/src/api/host/Config"
 	"github.com/radyatamaa/loyalti-go-echo/src/domain/model"
-	"log"
+	"net/http"
 )
 
 func PublishCreateCard(c echo.Context) error {
@@ -59,7 +59,7 @@ func PublishCreateCard(c echo.Context) error {
 
 	partition, offset, err := producer.SendMessage(msg)
 	if err != nil {
-		log.Println(err)
+		return c.String(http.StatusBadRequest,err.Error())
 	}
 	fmt.Printf("Message is stored in topic(%s)/partition(%d)/offset(%d)\n", newTopic, partition, offset)
 	return nil

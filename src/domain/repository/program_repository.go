@@ -132,11 +132,11 @@ func TotalPoint(id int, pay int, pin string, outletid string, cardtype string) [
 		return nil
 	}
 	if outletid == employee.OutletId && pin == employee.EmployeePin {
-		if pay < *(program.MinPayment)  {
+		if pay < (program.MinPayment)  {
 			fmt.Println("Customer tidak mendapatkan poin ")
 			return nil
 		}
-		var total = pay * *(program.ProgramPoint) / *(program.MinPayment)
+		var total = pay * (program.ProgramPoint) / (program.MinPayment)
 		t := &model.TotalPoint{}
 		t.Total = total
 		updatepoint := append(totalpoint, *t)
@@ -171,12 +171,12 @@ func TotalChop(id int, pay int, pin string, outletid string, cardtype string) []
 		return nil
 	}
 	if outletid == employee.OutletId && pin == employee.EmployeePin {
-		if pay < *(program.MinPayment)  {
+		if pay < (program.MinPayment)  {
 			fmt.Println("Customer tidak mendapatkan tambahan chop ")
 			return nil
 		}
 
-		if pay >= *(program.MinPayment){
+		if pay >= (program.MinPayment){
 			var total = pay / pay * 1
 			t := &model.TotalChop{}
 			t.Total = total

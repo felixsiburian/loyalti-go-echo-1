@@ -2,6 +2,7 @@ package router
 
 import (
 	"fmt"
+	"github.com/radyatamaa/loyalti-go-echo/src/api/apiKafka/SendEmail"
 	"github.com/spf13/viper"
 
 	"github.com/labstack/echo"
@@ -123,8 +124,11 @@ func New() *echo.Echo {
 	fmt.Println("masuk ini")
 	e.POST("/upload", UploadToBlob.ProcessImage)
 	fmt.Println("masuk ini")
+
 	//Send Mail SendGrid
-	//e.POST("/SendMail", SendGrid.SendMail)
+	fmt.Println("mulai kirim email")
+	e.POST("/SendMail", SendEmail.PublishSendEmailCustomer)
+	fmt.Println("kirim email selesai")
 
 	return e
 }

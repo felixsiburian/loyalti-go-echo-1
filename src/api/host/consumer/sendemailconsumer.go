@@ -15,7 +15,7 @@ import (
 func consumeSendemail(topics []string, master sarama.Consumer) (chan *sarama.ConsumerMessage, chan *sarama.ConsumerError) {
 	consumers := make(chan *sarama.ConsumerMessage)
 	errors := make(chan *sarama.ConsumerError)
-	fmt.Println("kafka Transaction is ready")
+	fmt.Println("kafka Send Email is ready")
 	for _, topic := range topics {
 		if strings.Contains(topic, "__consumer_offsets") {
 			continue
@@ -24,7 +24,7 @@ func consumeSendemail(topics []string, master sarama.Consumer) (chan *sarama.Con
 		// this only consumes partition no 1, you would probably want to consume all partitions
 		consumer, err := master.ConsumePartition(topic, partitions[0], sarama.OffsetNewest)
 		if nil != err {
-			fmt.Println("Erorr transaction : ", err.Error())
+			fmt.Println("Erorr Send email : ", err.Error())
 			fmt.Printf("Topic %v Partitions: %v", topic, partitions)
 			panic(err)
 		}
@@ -42,17 +42,19 @@ func consumeSendemail(topics []string, master sarama.Consumer) (chan *sarama.Con
 					email := model.Email{}
 					switch msg.Topic {
 					case "send-email-topic":
+						fmt.Println("Topic send-email didapatkan")
 						err := json.Unmarshal([]byte(msg.Value), &email)
 						if err != nil {
 							fmt.Println(err.Error())
 							os.Exit(1)
 						}
-						err = SendGrid.SendMail(email)
-						if err != nil {
+						err = SendGrid.SendMail(&email)
+						if err != nil{
 							fmt.Println("Error : ", err.Error())
+							os.Exit(1)
 						}
 						fmt.Println(string(msg.Value))
-						fmt.Println("Transaksi berhasil dibuat")
+						fmt.Println("Email berhasil dikirim")
 						break
 					//case "update-transaction-topic":
 					//	err := json.Unmarshal([]byte(msg.Value), &transaction)

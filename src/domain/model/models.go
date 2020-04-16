@@ -38,8 +38,8 @@ type ResponseProcess struct {
 
 type Response struct {
 	Access_Token string `json:"access_token"`
-	Expires_In int `json:"expires_in"`
-	Token_Type string `json:"token_type"`
+	Expires_In   int    `json:"expires_in"`
+	Token_Type   string `json:"token_type"`
 }
 
 type User struct {
@@ -188,21 +188,21 @@ type Program struct {
 	OutletID           string     `json:"outlet_id"`
 	MerchantId         int        `json:"merchant_id"`
 	//MerchantName       string     `json:"merchant_name"`
-	CategoryId            int      `json:"category_id"`
-	Benefit               *string  `json:"benefit"`
-	TermsAndCondition     *string  `json:"terms_and_condition"`
-	Tier                  *string  `json:"tier"`
-	RedeemRules           *string  `json:"redeem_rules"`
-	RewardTarget          *float64 `json:"reward_target"`
-	QRCodeId              *string  `json:"qr_code_id"`
-	ProgramPoint          *int     `json:"program_point"`
-	MinPayment            *int     `json:"min_payment"`
-	IsReqBillNumber       bool     `json:"is_req_bill_number"`
-	IsReqTotalTransaction bool     `json:"is_req_total_transaction"`
-	IsPushNotification    bool     `json:"is_push_notification"`
-	IsLendCard            bool     `json:"is_lend_card"`
-	IsGiveCard            bool     `json:"is_give_card"`
-	IsWelcomeBonus        bool     `json:"is_welcome_bonus"`
+	CategoryId            int     `json:"category_id"`
+	Benefit               string  `json:"benefit"`
+	TermsAndCondition     string  `json:"terms_and_condition"`
+	Tier                  string  `json:"tier"`
+	RedeemRules           string  `json:"redeem_rules"`
+	RewardTarget          float64 `json:"reward_target"`
+	QRCodeId              string  `json:"qr_code_id"`
+	ProgramPoint          int     `json:"program_point"`
+	MinPayment            int     `json:"min_payment"`
+	IsReqBillNumber       bool    `json:"is_req_bill_number"`
+	IsReqTotalTransaction bool    `json:"is_req_total_transaction"`
+	IsPushNotification    bool    `json:"is_push_notification"`
+	IsLendCard            bool    `json:"is_lend_card"`
+	IsGiveCard            bool    `json:"is_give_card"`
+	IsWelcomeBonus        bool    `json:"is_welcome_bonus"`
 }
 
 type SpecialProgram struct {
@@ -224,19 +224,19 @@ type SpecialProgram struct {
 	OutletID           string     `json:"outlet_id"`
 	MerchantId         int        `json:"merchant_id"`
 	//MerchantName       string     `json:"merchant_name"`
-	CategoryId            int      `json:"category_id"`
-	Benefit               *string  `json:"benefit"`
-	TermsAndCondition     *string  `json:"terms_and_condition"`
-	Tier                  *string  `json:"tier"`
-	RedeemRules           *string  `json:"redeem_rules"`
-	RewardTarget          *float64 `json:"reward_target"`
-	QRCodeId              *string  `json:"qr_code_id"`
-	IsReqBillNumber       bool     `json:"is_req_bill_number"`
-	IsReqTotalTransaction bool     `json:"is_req_total_transaction"`
-	IsPushNotification    bool     `json:"is_push_notification"`
-	IsLendCard            bool     `json:"is_lend_card"`
-	IsGiveCard            bool     `json:"is_give_card"`
-	IsWelcomeBonus        bool     `json:"is_welcome_bonus"`
+	CategoryId            int     `json:"category_id"`
+	Benefit               string  `json:"benefit"`
+	TermsAndCondition     string  `json:"terms_and_condition"`
+	Tier                  string  `json:"tier"`
+	RedeemRules           string  `json:"redeem_rules"`
+	RewardTarget          float64 `json:"reward_target"`
+	QRCodeId              string  `json:"qr_code_id"`
+	IsReqBillNumber       bool    `json:"is_req_bill_number"`
+	IsReqTotalTransaction bool    `json:"is_req_total_transaction"`
+	IsPushNotification    bool    `json:"is_push_notification"`
+	IsLendCard            bool    `json:"is_lend_card"`
+	IsGiveCard            bool    `json:"is_give_card"`
+	IsWelcomeBonus        bool    `json:"is_welcome_bonus"`
 }
 
 type Product struct {
@@ -440,7 +440,7 @@ type EmailEmployee struct {
 }
 
 type Key struct {
-	id int `gorm:"AUTO_INCREMENT;PRIMARY_KEY;NOT NULL"; json:"id"`
+	id      int    `gorm:"AUTO_INCREMENT;PRIMARY_KEY;NOT NULL"; json:"id"`
 	keyName string `json:"key_name"`
-	key string `json:"key"`
+	key     string `json:"key"`
 }
