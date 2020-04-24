@@ -54,5 +54,7 @@ func UplodBytesToBlob(b []byte)(string, error) {
 	if errU != nil {
 		fmt.Println("Erorr Upload ", errU.Error())
 	}
+
+	//var bloburl = azblob
 	return blockBlobUrl.String(), errU
 }

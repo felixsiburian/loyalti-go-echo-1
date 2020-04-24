@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Email</title>
+    <style>
+    body{
+        background-image: url("/src/api/SendGrid/bg-2-le@2x.png");
+        width:50%;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+    .bg{
+        background-color:rgba(255, 255, 255, 0.486);
+        margin-right: 5%;
+        margin-left: 5%;
+        margin-top: 3%;
+        border-radius: 15px;
+    }
+    h1{
+        font-size: 13mm;
+        font-family: NunitoSans;
+        padding-bottom: 40px;
+        padding-top: 40px;
+        margin: 0;
+    }
+    p{
+        font-size : 6mm;
+        font-family: NunitoSans;
+        color: rgb(66, 65, 65);
+        
+    }
+    h3{
+        font-family: NunitoSans;
+        font-size: 7mm;
+        
+    }
+    .bodytemplate{
+        text-align: center;
+        padding-bottom: 10%;
+        padding-top: 5%;
+        padding-left: 10%;
+        padding-right: 10%;
+    }
+    img.logo{
+        margin-left: 5%;
+        margin-top: 2%;
+        /* height: 7%; */
+        width: 24%;
+    }
+    img.apple{
+        border-radius: 10px;
+        float: right;
+        width: 20%;
+        height: 7%;
+        margin-top: 2%;
+        margin-right: 2%;
+    }
+    img.android{
+        border-radius: 10px;
+        float: right;
+        width: 20%;
+        height: 7%;
+        margin-top: 2%;
+        margin-right: 5%;
+    }
+    img.imgprofile{
+        text-align: center;
+        width: 30%;
+
+    }
+    </style>
+</head>
+<body style="background-image: url('bg-2-le@2x.png')">
+    <div class="bg">
+        <div class="bodytemplate">
+            <header>
+                <h1>{{.SenderName}}</h1>
+            </header>
+            <img class="imgprofile" src="/asset/placeholder.png" alt="">
+            <h3></h3>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. In nisi repudiandae ipsa cumque. Ut molestias tempore iusto dolorum cum atque officia ipsum dolor error ducimus! Maiores tempore consequatur illum quis.</p>
+            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Inventore similique ratione accusamus necessitatibus adipisci aut nisi neque eius dolorum, atque animi hic cumque, vero veniam explicabo! Error facilis aperiam perferendis!</p>
+        </div>
+    </div>
+    <br>
+    <div>
+        <img class="logo" src="./asset/le-logo.png" alt="">
+        <img class="android" src="./asset/WhatsApp Image 2020-04-20 at 14.58.09.jpeg" alt="">
+        <img class="apple" src="./asset/WhatsApp Image 2020-04-20 at 14.58.09 (1).jpeg" alt="">  
+    </div>
+    <br><br>
+</body>
+</html>

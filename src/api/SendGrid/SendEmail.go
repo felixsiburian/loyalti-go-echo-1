@@ -30,7 +30,10 @@ func SendMail(email *model.Email) error {
 		fmt.Println("masuk ke perulangan")
 		to := mail.NewEmail(e.Receiver[i].Name, e.Receiver[i].Email)
 		plainTextContent := "abcd"
-		htmlContent := e.Body
+		htmlContent, err := e.ParseTemplate("SendEmailTemplate.html", e)
+		if err != nil {
+			fmt.Println("Error HTML : ", err.Error())
+		}
 		message := mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
 		client := sendgrid.NewSendClient(a)
 		fmt.Println("isi sendgrid ", a)

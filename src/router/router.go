@@ -94,10 +94,12 @@ func New() *echo.Echo {
 	e.POST("/update-voucher", Voucher.PublishUpdateVoucher)
 	e.POST("/delete-voucher", Voucher.PublishDeleteTransaction)
 
+	//Kafka Reward Merchant
 	e.POST("/create-reward", Reward.PublishCreateReward)
 	e.POST("/update-reward", Reward.PublishUpdateReward)
 	e.POST("/delete-reward", Reward.PublishUpdateReward)
 
+	//Kafka Customer By admin
 	//Get Token
 	//e.Use(middleware.BasicAuth(func(username, password string, c echo.Context) (bool, error) {
 	//	// Be careful to use constant time comparison to prevent timing attacks

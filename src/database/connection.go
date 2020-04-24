@@ -45,6 +45,16 @@ func ConnectionDB() *gorm.DB {
 	return db
 }
 
+func ConeectionCustomerDB() *gorm.DB{
+	db, err := gorm.Open("mssql", "sqlserver://moonlay:Standar123.@loyaltiexpress.database.windows.net?database=loyalti.CustomersDb.Dev")
+
+	if err != nil {
+		fmt.Println("error : ", err.Error())
+	}
+	SqlDB = db
+	return db
+}
+
 //func (c Connection) ConnectionDB2() *gorm.DB{
 //	db, err := gorm.Open("mssql", "sqlserver://sa:Moonlay2019.@11.11.5.146?database=loyalti.MerchantDb.Dev")
 //	if err != nil {

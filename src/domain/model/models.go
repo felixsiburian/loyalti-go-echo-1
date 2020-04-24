@@ -1,6 +1,9 @@
 package model
 
 import (
+	"bytes"
+	"fmt"
+	"html/template"
 	"time"
 )
 
@@ -165,7 +168,7 @@ type Outlet struct {
 	OutletLatitude   string     `json:"outlet_latitude"`
 	OutletDay        time.Time  `json:"outlet_day"`
 	OutletHour       time.Time  `json:"outlet_hour"`
-	MerchantId       int        `json:"merchant_id"`
+	MerchantEmail    string     `json:"merchant_email"`
 	Timezone         string     `json:"timezone"`
 }
 
@@ -428,6 +431,21 @@ type ReceiverStruct struct {
 	Name  string `json:"name"`
 }
 
+func (r *Email) ParseTemplate(templateFileName string, data interface{}) (string, error) {
+	t, err := template.ParseFiles(fmt.Sprintf("src/api/SendGrid/%s", templateFileName))
+	if err != nil {
+		fmt.Println("Error : ", err.Error())
+		return "error", err
+	}
+	buf := new(bytes.Buffer)
+	if err = t.Execute(buf, data); err != nil {
+		fmt.Println("error exec : ", err.Error())
+		return "nil", err
+	}
+	r.Body = buf.String()
+	return buf.String(), nil
+}
+
 type EmailEmployee struct {
 	SenderEmail   string `json:"sender_email"`
 	SenderName    string `json:"sender_name"`
@@ -446,4 +464,55 @@ type EmailForgetPass struct {
 	Subject     string           `json:"subject"`
 	Body        string           `json:"body"`
 	TextContent string           `json:"text_content"`
+}
+
+type Customer struct {
+	Id           string     `gorm:"AUTO_INCREMENT;PRIMARY_KEY;NOT NULL"; json:"Id"`
+	CreatedDate  time.Time  `json:"CreatedDate"`
+	CreatedBy    string     `json:"CreatedBy"`
+	ModifiedDate time.Time  `json:"ModifiedDate"`
+	ModifiedBy   string     `json:"ModifiedBy"`
+	Active       bool       `json:"Active"`
+	IsDeleted    bool       `json:"IsDeleted"`
+	DeletedDate  *time.Time `json:"DeletedDate"`
+	DeletedBy    string     `json:"DeletedBy"`
+
+	FirstName        string    `json:"FirstName"`
+	LastName         string    `json:"LastName"`
+	PhoneNumber      string    `json:"PhoneNumber"`
+	UserEmail        string    `json:"UserEmail"`
+	Gender           string    `json:"Gender"`
+	BirthDate        time.Time `json:"BirthDate"`
+	ProfilePict      string    `json:"ProfilePict"`
+	ReferralCode     string    `json:"ReferralCode"`
+	UsedReferralCode string    `json:"UsedReferralCode"`
+	DomicileCity     string    `json:"DomicileCity"`
+	UserId           string    `json:"UserId"`
+}
+
+type From struct {
+	Email string `json:"email"`
+}
+
+type To struct {
+	Email string `json:"email"`
+	Name  string `json:"name"`
+}
+
+type DynamicTemplateData struct {
+	SenderName string `json:"sender_name"`
+	Body       string `json:"body"`
+	Pin        string `json:"pin"`
+}
+
+type Personalization struct {
+	To                  []To                `json:"to"`
+	DynamicTemplateData DynamicTemplateData `json:"dynamic_template_data"`
+	Subject             string              `json:"subject"`
+}
+
+type Emails struct {
+	From            From              `json:"from"`
+	Personalization []Personalization `json:"personalizations"`
+	TemplateId      string            `json:"template_id"`
 }

@@ -320,6 +320,7 @@ func GetMerchant(page *int, size *int, sort *int, email *string) []model.Merchan
 		db.Model(&merchant).Where("merchant_email =  ?", email).Find(&merchant)
 		defer db.Close()
 	}
+
 	defer db.Close()
 	return merchant
 }

@@ -12,15 +12,14 @@ import (
 
 func PublishSendEmailCustomer(c echo.Context) error {
 	//var data model.Merchant
-	data := new(model.Email)
+	data := new(model.Emails)
 	err := json.NewDecoder(c.Request().Body).Decode(&data)
 	//err := c.Bind(data)
 	if err != nil {
 		panic(err)
 	}
-
+	data.TemplateId = "d-287e301e6f0b4d29b4f7f1143bc9697c"
 	fmt.Println(data)
-
 	//if len(data.MerchantEmail) == 0 && len(data.MerchantName) == 0 {
 	//	return c.String(http.StatusBadRequest, "Nama dan Email kosong")
 	//} else if len(data.MerchantEmail) == 0 {

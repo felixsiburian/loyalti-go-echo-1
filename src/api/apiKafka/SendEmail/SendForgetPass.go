@@ -13,13 +13,13 @@ import (
 func PublishSendForgetPassword(c echo.Context) error {
 	fmt.Println("masuk ke send pin")
 	//var data model.Merchant
-	data := new(model.EmailForgetPass)
+	data := new(model.Emails)
 	err := json.NewDecoder(c.Request().Body).Decode(&data)
 	//err := c.Bind(data)
 	if err != nil {
 		panic(err)
 	}
-
+	data.TemplateId = "d-0d023aa0bd5544bc8038c314c6b289cb"
 	fmt.Println(data)
 
 	//if len(data.MerchantEmail) == 0 && len(data.MerchantName) == 0 {

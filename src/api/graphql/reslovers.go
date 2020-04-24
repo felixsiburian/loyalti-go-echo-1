@@ -218,6 +218,7 @@ func ProgramResolver(p graphql.ResolveParams) (interface{}, error) {
 }
 
 func OutletResolver(p graphql.ResolveParams) (interface{}, error) {
+	fmt.Println("masuk ke resolver")
 	page, ok := p.Args["page"].(int)
 	size, sip := p.Args["size"].(int)
 	id, top := p.Args["id"].(int)
