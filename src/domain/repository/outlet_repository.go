@@ -4,10 +4,8 @@ import (
 	"fmt"
 	"github.com/biezhi/gorm-paginator/pagination"
 	"github.com/jinzhu/gorm"
-	"github.com/labstack/gommon/log"
 	"github.com/radyatamaa/loyalti-go-echo/src/database"
 	"github.com/radyatamaa/loyalti-go-echo/src/domain/model"
-	"os"
 	"time"
 )
 
@@ -171,39 +169,39 @@ func GetOutlet(page *int, size *int, id *int, email *string) []model.Outlet {
 		}, &outlet)
 	}
 	fmt.Println("lewat 5")
-	rows,err := db.Table("merchants").Select("merchants.merchant_name, outlets.outlet_name").Joins("left join outlets on outlets.merchant_email = merchants.merchant_email").Rows()
-	if err != nil {
-		fmt.Println("Error join : ", err.Error())
-		os.Exit(1)
-	}
-
-	result := make([]model.Outlet, 0)
-
-	for rows.Next() {
-		fmt.Println("masuk ke perulangan")
-		o := &model.Outlet{}
-
-		err = rows.Scan(
-			&o.OutletName,
-			&o.MerchantEmail,
-			)
-
-		outlet := new (model.Outlet)
-		db.Table("merchants").
-			Select("merchants.merchant_name").
-			Where("merchant_email = ?", o.MerchantEmail).
-			First(&outlet)
-
-		if err != nil {
-			fmt.Println("error join 2 : ", err.Error())
-			log.Fatal(err)
-		}
-		result = append(result, *o)
-		fmt.Println(result)
-	}
-
-	res := db.Table("merchants").Select("merchants.merchant_name, outlets.outlet_name").Joins("left join outlets on outlets.merchant_email = merchants.merchant_email").Scan(&result)
-	fmt.Println(res)
+	//rows,err := db.Table("merchants").Select("merchants.merchant_name, outlets.outlet_name").Joins("left join outlets on outlets.merchant_email = merchants.merchant_email").Rows()
+	//if err != nil {
+	//	fmt.Println("Error join : ", err.Error())
+	//	os.Exit(1)
+	//}
+	//
+	//result := make([]model.Outlet, 0)
+	//
+	//for rows.Next() {
+	//	fmt.Println("masuk ke perulangan")
+	//	o := &model.Outlet{}
+	//
+	//	err = rows.Scan(
+	//		&o.OutletName,
+	//		&o.MerchantEmail,
+	//		)
+	//
+	//	outlet := new (model.Outlet)
+	//	db.Table("merchants").
+	//		Select("merchants.merchant_name").
+	//		Where("merchant_email = ?", o.MerchantEmail).
+	//		First(&outlet)
+	//
+	//	if err != nil {
+	//		fmt.Println("error join 2 : ", err.Error())
+	//		log.Fatal(err)
+	//	}
+	//	result = append(result, *o)
+	//	fmt.Println(result)
+	//}
+	//
+	//res := db.Table("merchants").Select("merchants.merchant_name, outlets.outlet_name").Joins("left join outlets on outlets.merchant_email = merchants.merchant_email").Scan(&result)
+	//fmt.Println(res)
 
 	db.Close()
 	return outlet

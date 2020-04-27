@@ -7,6 +7,7 @@ import (
 	"github.com/labstack/echo"
 	"github.com/radyatamaa/loyalti-go-echo/src/api/host/Config"
 	"github.com/radyatamaa/loyalti-go-echo/src/domain/model"
+	"net/http"
 )
 
 func PublishCreateEmployee(c echo.Context) error {
@@ -17,6 +18,7 @@ func PublishCreateEmployee(c echo.Context) error {
 	//err := c.Bind(data)
 	if err != nil {
 		fmt.Println("Error Publisher : ", err.Error())
+		return c.String(http.StatusBadRequest, err.Error())
 	}
 
 	fmt.Println(data)
@@ -66,6 +68,6 @@ func PublishCreateEmployee(c echo.Context) error {
 		fmt.Println("Error bawah publisher : ", err.Error())
 	}
 	fmt.Printf("Message is stored in topic(%s)/partition(%d)/offset(%d)\n", newTopic, partition, offset)
-	return nil
+	return c.JSON(http.StatusOK, string(message))
 }
 

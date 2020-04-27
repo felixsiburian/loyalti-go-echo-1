@@ -8,6 +8,7 @@ import (
 	"github.com/radyatamaa/loyalti-go-echo/src/api/host/Config"
 	"github.com/radyatamaa/loyalti-go-echo/src/domain/model"
 	"log"
+	"net/http"
 )
 
 func PublishSendForgetPassword(c echo.Context) error {
@@ -17,6 +18,7 @@ func PublishSendForgetPassword(c echo.Context) error {
 	err := json.NewDecoder(c.Request().Body).Decode(&data)
 	//err := c.Bind(data)
 	if err != nil {
+		return c.String(http.StatusBadRequest, err.Error())
 		panic(err)
 	}
 	data.TemplateId = "d-0d023aa0bd5544bc8038c314c6b289cb"
@@ -64,5 +66,5 @@ func PublishSendForgetPassword(c echo.Context) error {
 		log.Println(err)
 	}
 	fmt.Printf("Message is stored in topic(%s)/partition(%d)/offset(%d)\n", newTopic, partition, offset)
-	return nil
+	return c.JSON(http.StatusOK, string(message))
 }
