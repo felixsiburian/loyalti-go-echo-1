@@ -14,7 +14,7 @@ import (
 func PublishCreateMerchant(c echo.Context) error {
 	fmt.Println("masuk ke publish")
 	//var data model.Merchant
-	data := new(model.NewMerchantCommand)
+	data := new(model.Merchant)
 	err := json.NewDecoder(c.Request().Body).Decode(&data)
 	//err := c.Bind(data)
 	if err != nil {

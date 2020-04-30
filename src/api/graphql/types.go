@@ -103,6 +103,9 @@ var merchantType = graphql.NewObject(graphql.ObjectConfig{
 		"merchant_gallery": &graphql.Field{
 			Type: graphql.String,
 		},
+		"category_name": &graphql.Field{
+			Type: graphql.String,
+		},
 	},
 })
 
@@ -176,6 +179,9 @@ var merchantCommandType = graphql.NewObject(graphql.ObjectConfig{
 			Type: graphql.String,
 		},
 		"merchant_password": &graphql.Field{
+			Type: graphql.String,
+		},
+		"category_name": &graphql.Field{
 			Type: graphql.String,
 		},
 	},
@@ -256,8 +262,15 @@ var cardType = graphql.NewObject(graphql.ObjectConfig{
 		"card_type_name": &graphql.Field{
 			Type: graphql.String,
 		},
+		"program_name": &graphql.Field{
+			Type: graphql.String,
+		},
+		"merchant_name": &graphql.Field{
+			Type: graphql.String,
+		},
 	},
 })
+
 
 var categoryType = graphql.NewObject(graphql.ObjectConfig{
 	Name: "Category",
@@ -349,12 +362,9 @@ var programType = graphql.NewObject(graphql.ObjectConfig{
 		"outlet_id": &graphql.Field{
 			Type: graphql.Int,
 		},
-		"merchant_id": &graphql.Field{
-			Type: graphql.Int,
+		"merchant_email": &graphql.Field{
+			Type: graphql.String,
 		},
-		//"merchant_name": &graphql.Field{
-		//	Type: graphql.String,
-		//},
 		"category_id": &graphql.Field{
 			Type: graphql.Int,
 		},
@@ -381,6 +391,33 @@ var programType = graphql.NewObject(graphql.ObjectConfig{
 		},
 		"min_payment": &graphql.Field{
 			Type: graphql.Int,
+		},
+		"is_req_bill_number": &graphql.Field{
+			Type: graphql.Boolean,
+		},
+		"is_req_total_transaction": &graphql.Field{
+			Type: graphql.Boolean,
+		},
+		"is_push_notification": &graphql.Field{
+			Type: graphql.Boolean,
+		},
+		"is_lend_card": &graphql.Field{
+			Type: graphql.Boolean,
+		},
+		"is_give_card": &graphql.Field{
+			Type: graphql.Boolean,
+		},
+		"is_welcome_bonus": &graphql.Field{
+			Type: graphql.Boolean,
+		},
+		"merchant_name": &graphql.Field{
+			Type: graphql.String,
+		},
+		"outlet_name": &graphql.Field{
+			Type: graphql.String,
+		},
+		"category_name": &graphql.Field{
+			Type: graphql.String,
 		},
 	},
 })
@@ -436,10 +473,7 @@ var specialprogramType = graphql.NewObject(graphql.ObjectConfig{
 		"outlet_id": &graphql.Field{
 			Type: graphql.Int,
 		},
-		"merchant_id": &graphql.Field{
-			Type: graphql.Int,
-		},
-		"merchant_name": &graphql.Field{
+		"merchant_email": &graphql.Field{
 			Type: graphql.String,
 		},
 		"category_id": &graphql.Field{
@@ -464,6 +498,15 @@ var specialprogramType = graphql.NewObject(graphql.ObjectConfig{
 			Type: graphql.Float,
 		},
 		"qr_code_id": &graphql.Field{
+			Type: graphql.String,
+		},
+		"merchant_name": &graphql.Field{
+			Type: graphql.String,
+		},
+		"outlet_name": &graphql.Field{
+			Type: graphql.String,
+		},
+		"category_name": &graphql.Field{
 			Type: graphql.String,
 		},
 	},
@@ -649,11 +692,11 @@ var transactionType = graphql.NewObject(graphql.ObjectConfig{
 		"deleted_by": &graphql.Field{
 			Type: graphql.String,
 		},
-		"merchant_id": &graphql.Field{
-			Type: graphql.Int,
+		"merchant_email": &graphql.Field{
+			Type: graphql.String,
 		},
 		"outlet_id": &graphql.Field{
-			Type: graphql.String,
+			Type: graphql.Int,
 		},
 		"total_transaction": &graphql.Field{
 			Type: graphql.Int,
@@ -662,6 +705,12 @@ var transactionType = graphql.NewObject(graphql.ObjectConfig{
 			Type: graphql.Int,
 		},
 		"bill_number": &graphql.Field{
+			Type : graphql.String,
+		},
+		"merchant_name": &graphql.Field{
+			Type : graphql.String,
+		},
+		"outlet_name": &graphql.Field{
 			Type : graphql.String,
 		},
 	},
@@ -736,10 +785,19 @@ var card = graphql.NewObject(graphql.ObjectConfig{
 		"icon_image_stamp": &graphql.Field{
 			Type: graphql.String,
 		},
-		"merchant_id": &graphql.Field{
-			Type: graphql.Int,
+		"merchant_email": &graphql.Field{
+			Type: graphql.String,
 		},
 		"tier": &graphql.Field{
+			Type: graphql.String,
+		},
+		"template_pattern": &graphql.Field{
+			Type: graphql.String,
+		},
+		"merchant_name": &graphql.Field{
+			Type: graphql.String,
+		},
+		"program_name": &graphql.Field{
 			Type: graphql.String,
 		},
 	},
@@ -838,14 +896,23 @@ var voucher = graphql.NewObject(graphql.ObjectConfig{
 		"background_voucher_pattern": &graphql.Field{
 			Type:graphql.String,
 		},
-		"merchant_id": &graphql.Field{
+		"merchant_email": &graphql.Field{
 			Type:graphql.String,
 		},
 		"outlet_id": &graphql.Field{
-			Type:graphql.String,
+			Type:graphql.Int,
 		},
 		"program_id": &graphql.Field{
 			Type:graphql.Int,
+		},
+		"merchant_name": &graphql.Field{
+			Type: graphql.String,
+		},
+		"outlet_name": &graphql.Field{
+			Type: graphql.String,
+		},
+		"program_name": &graphql.Field{
+			Type: graphql.String,
 		},
 	},
 })
@@ -854,7 +921,7 @@ var reward = graphql.NewObject(graphql.ObjectConfig{
 	Name: "Reward",
 	Fields: graphql.Fields{
 		"id": &graphql.Field{
-			Type: graphql.String,
+			Type: graphql.Int,
 		},
 		"created": &graphql.Field{
 			Type: graphql.DateTime,
@@ -898,11 +965,20 @@ var reward = graphql.NewObject(graphql.ObjectConfig{
 		"program_id": &graphql.Field{
 			Type:graphql.Int,
 		},
-		"merchant_id": &graphql.Field{
+		"merchant_email": &graphql.Field{
+			Type:graphql.String,
+		},
+		"outletid": &graphql.Field{
 			Type:graphql.Int,
 		},
-		"outlet_id": &graphql.Field{
-			Type:graphql.Int,
+		"merchant_name": &graphql.Field{
+			Type: graphql.String,
+		},
+		"program_name": &graphql.Field{
+			Type: graphql.String,
+		},
+		"outlet_name": &graphql.Field{
+			Type: graphql.String,
 		},
 	},
 })

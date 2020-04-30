@@ -5,91 +5,111 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Send Email</title>
     <style>
-    body{
-        background-image: url("/src/api/SendGrid/bg-2-le@2x.png");
-        width:50%;
-        background-position: center;
-        background-repeat: no-repeat;
-    }
-    .bg{
-        background-color:rgba(255, 255, 255, 0.486);
-        margin-right: 5%;
-        margin-left: 5%;
-        margin-top: 3%;
-        border-radius: 15px;
-    }
-    h1{
-        font-size: 13mm;
-        font-family: NunitoSans;
-        padding-bottom: 40px;
-        padding-top: 40px;
-        margin: 0;
-    }
-    p{
-        font-size : 6mm;
-        font-family: NunitoSans;
-        color: rgb(66, 65, 65);
-        
-    }
-    h3{
-        font-family: NunitoSans;
-        font-size: 7mm;
-        
-    }
-    .bodytemplate{
-        text-align: center;
-        padding-bottom: 10%;
-        padding-top: 5%;
-        padding-left: 10%;
-        padding-right: 10%;
-    }
-    img.logo{
-        margin-left: 5%;
-        margin-top: 2%;
-        /* height: 7%; */
-        width: 24%;
-    }
-    img.apple{
-        border-radius: 10px;
-        float: right;
-        width: 20%;
-        height: 7%;
-        margin-top: 2%;
-        margin-right: 2%;
-    }
-    img.android{
-        border-radius: 10px;
-        float: right;
-        width: 20%;
-        height: 7%;
-        margin-top: 2%;
-        margin-right: 5%;
-    }
-    img.imgprofile{
-        text-align: center;
-        width: 30%;
+        body {
+            background-image: url("/src/api/SendGrid/bg-2-le@2x.png");
+            width: 50%;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
 
-    }
+        .bg{
+            background-color:rgba(255, 255, 255, 0.486);
+            margin-right: 10%;
+            margin-left: 10%;
+            margin-top: 10%;
+            border-radius: 15px;
+        }
+
+        h1 {
+            font-size: 13mm;
+            font-family: NunitoSans;
+            padding-bottom: 40px;
+            padding-top: 40px;
+            margin: 0;
+        }
+
+        p {
+            font-size: 6mm;
+            font-family: NunitoSans;
+            color: rgb(66, 65, 65);
+
+        }
+
+        h3 {
+            font-family: NunitoSans;
+            font-size: 7mm;
+
+        }
+
+        .bodytemplate {
+            text-align: center;
+            padding-bottom: 10%;
+            padding-top: 5%;
+            padding-left: 10%;
+            padding-right: 10%;
+        }
+
+        img.logo {
+            margin-left: 5%;
+            margin-top: 2%;
+            /* height: 7%; */
+            width: 24%;
+        }
+
+        img.apple {
+            border-radius: 10px;
+            float: right;
+            width: 20%;
+            height: 7%;
+            margin-top: 2%;
+            margin-right: 2%;
+        }
+
+        img.android {
+            border-radius: 10px;
+            float: right;
+            width: 20%;
+            height: 7%;
+            margin-top: 2%;
+            margin-right: 5%;
+        }
+
+        img.imgprofile {
+            text-align: center;
+            width: 30%;
+
+        }
     </style>
 </head>
-<body style="background-image: url('bg-2-le@2x.png')">
-    <div class="bg">
-        <div class="bodytemplate">
-            <header>
-                <h1>{{.SenderName}}</h1>
-            </header>
-            <img class="imgprofile" src="/asset/placeholder.png" alt="">
-            <h3></h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. In nisi repudiandae ipsa cumque. Ut molestias tempore iusto dolorum cum atque officia ipsum dolor error ducimus! Maiores tempore consequatur illum quis.</p>
-            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Inventore similique ratione accusamus necessitatibus adipisci aut nisi neque eius dolorum, atque animi hic cumque, vero veniam explicabo! Error facilis aperiam perferendis!</p>
-        </div>
+<body style="background-image: url('https://loyaltiexpress.blob.core.windows.net/loyalti-images/image_20200429-8aa9a7ff-d705-4b3f-b1a1-d893e1ab8fc6.jpg')">
+<div style="background-color: rgba(255, 255, 255, 0.486);margin-right: 10%; margin-left: 10%; margin-top: 10%; border-radius: 15px">
+    <div class="bodytemplate">
+        <header>
+            <h1>{{.SenderName}}</h1>
+        </header>
+        <img class="imgprofile"
+             src="https://loyaltiexpress.blob.core.windows.net/loyalti-images/image_20200429-62369f03-b120-470a-bde6-966dfda48417.jpg"
+             alt="">
+        <h3></h3>
+        <p>{{.Body}}</p>
     </div>
-    <br>
-    <div>
-        <img class="logo" src="./asset/le-logo.png" alt="">
-        <img class="android" src="./asset/WhatsApp Image 2020-04-20 at 14.58.09.jpeg" alt="">
-        <img class="apple" src="./asset/WhatsApp Image 2020-04-20 at 14.58.09 (1).jpeg" alt="">  
-    </div>
-    <br><br>
+</div>
+<br>
+<div>
+    <img class="logo"
+         src="https://loyaltiexpress.blob.core.windows.net/loyalti-images/image_20200429-aeb1384a-e9aa-4684-8356-c2fdb282e30c.jpg"
+         alt="">
+    <a href="https://play.google.com/store/apps/details?id=com.admin.loyaltiexpressandroid">
+        <img class="android"
+             src="https://loyaltiexpress.blob.core.windows.net/loyalti-images/image_20200429-7a6fd744-c8b3-4859-a417-e8f8100e7349.jpg"
+             alt="">
+    </a>
+    <a href=" https://apps.apple.com/id/app/loyaltiexpress/id1108392102">
+        <img class="apple"
+             src="https://loyaltiexpress.blob.core.windows.net/loyalti-images/image_20200429-9970d200-4d07-4133-8342-536265fddc4b.jpg"
+             alt="">
+    </a>
+</div>
+<br><br>
 </body>
 </html>

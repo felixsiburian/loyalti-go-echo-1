@@ -30,15 +30,6 @@ type ResponseProcess struct {
 	UserId     string `json:"user_id"`
 }
 
-//type Response struct {
-//	Access_Token  string `json:"access_token"`
-//	Refresh_Token string `json:"refresh_token"`
-//	Scope         string `json:"scope"`
-//	Id_Token      string `json:"id_token"`
-//	Token_Type    string `json:"token_type"`
-//	Expires_In    int    `json:"expires_in"`
-//}
-
 type Response struct {
 	Access_Token string `json:"access_token"`
 	Expires_In   int    `json:"expires_in"`
@@ -77,8 +68,10 @@ type NewMerchantCommand struct {
 	MerchantMediaSocialId int        `json:"merchant_media_social_id"`
 	MerchantDescription   string     `json:"merchant_description"`
 	MerchantImageProfile  string     `json:"merchant_image_profile"`
-	MerchantGallery       string     `json:"merchant_gallery"`
-	MerchantPassword      string     `json:"merchant_password"`
+	MerchantGallery       []Gallery  `json:"merchant_gallery"`
+	//MerchantPassword      string     `json:"merchant_password"`
+
+	CategoryName string `json:"category_name"`
 }
 
 type Merchant struct {
@@ -105,6 +98,12 @@ type Merchant struct {
 	MerchantDescription   string     `json:"merchant_description"`
 	MerchantImageProfile  string     `json:"merchant_image_profile"`
 	MerchantGallery       string     `json:"merchant_gallery"`
+
+	CategoryName string `json:"category_name"`
+}
+
+type Gallery struct {
+	link string `json:"link"`
 }
 
 type MerchantCategory struct {
@@ -148,7 +147,7 @@ type CardType struct {
 	CardTypeName string     `json:"card_type_name"`
 }
 
-type Outlet struct {
+type Outlet2 struct {
 	Id               int        `gorm:"AUTO_INCREMENT;PRIMARY_KEY;NOT NULL"; json:"id"'`
 	Created          time.Time  `json:"created"`
 	CreatedBy        string     `json:"created_by"`
@@ -170,76 +169,84 @@ type Outlet struct {
 	OutletHour       time.Time  `json:"outlet_hour"`
 	MerchantEmail    string     `json:"merchant_email"`
 	Timezone         string     `json:"timezone"`
+
+	MerchantName string `json:"merchant_name"`
 }
 
 type Program struct {
-	Id                 int        `gorm:"AUTO_INCREMENT;PRIMARY_KEY;NOT NULL"; json:"id"`
-	Created            time.Time  `json:"created"`
-	CreatedBy          string     `json:"created_by"`
-	Modified           time.Time  `json:"modified"`
-	ModifiedBy         string     `json:"modified_by"`
-	Active             bool       `json:"active"`
-	IsDeleted          bool       `json:"is_deleted"`
-	Deleted            *time.Time `json:"deleted"`
-	Deleted_by         string     `json:"deleted_by"`
-	ProgramName        string     `json:"program_name"`
-	ProgramImage       string     `json:"program_image"`
-	ProgramStartDate   time.Time  `json:"program_start_date"`
-	ProgramEndDate     time.Time  `json:"program_end_date"`
-	ProgramDescription string     `json:"program_description"`
-	Card               string     `json:"card"`
-	OutletID           string     `json:"outlet_id"`
-	MerchantId         int        `json:"merchant_id"`
-	//MerchantName       string     `json:"merchant_name"`
-	CategoryId            int     `json:"category_id"`
-	Benefit               string  `json:"benefit"`
-	TermsAndCondition     string  `json:"terms_and_condition"`
-	Tier                  string  `json:"tier"`
-	RedeemRules           string  `json:"redeem_rules"`
-	RewardTarget          float64 `json:"reward_target"`
-	QRCodeId              string  `json:"qr_code_id"`
-	ProgramPoint          int     `json:"program_point"`
-	MinPayment            int     `json:"min_payment"`
-	IsReqBillNumber       bool    `json:"is_req_bill_number"`
-	IsReqTotalTransaction bool    `json:"is_req_total_transaction"`
-	IsPushNotification    bool    `json:"is_push_notification"`
-	IsLendCard            bool    `json:"is_lend_card"`
-	IsGiveCard            bool    `json:"is_give_card"`
-	IsWelcomeBonus        bool    `json:"is_welcome_bonus"`
+	Id                    int        `gorm:"AUTO_INCREMENT;PRIMARY_KEY;NOT NULL"; json:"id"`
+	Created               time.Time  `json:"created"`
+	CreatedBy             string     `json:"created_by"`
+	Modified              time.Time  `json:"modified"`
+	ModifiedBy            string     `json:"modified_by"`
+	Active                bool       `json:"active"`
+	IsDeleted             bool       `json:"is_deleted"`
+	Deleted               *time.Time `json:"deleted"`
+	Deleted_by            string     `json:"deleted_by"`
+	ProgramName           string     `json:"program_name"`
+	ProgramImage          string     `json:"program_image"`
+	ProgramStartDate      time.Time  `json:"program_start_date"`
+	ProgramEndDate        time.Time  `json:"program_end_date"`
+	ProgramDescription    string     `json:"program_description"`
+	Card                  string     `json:"card"`
+	OutletID              int        `json:"outlet_id"`
+	MerchantEmail         string     `json:"merchant_email"`
+	CategoryId            int        `json:"category_id"`
+	Benefit               string     `json:"benefit"`
+	TermsAndCondition     string     `json:"terms_and_condition"`
+	Tier                  string     `json:"tier"`
+	RedeemRules           string     `json:"redeem_rules"`
+	RewardTarget          int        `json:"reward_target"`
+	QRCodeId              string     `json:"qr_code_id"`
+	ProgramPoint          int        `json:"program_point"`
+	MinPayment            int        `json:"min_payment"`
+	IsReqBillNumber       bool       `json:"is_req_bill_number"`
+	IsReqTotalTransaction bool       `json:"is_req_total_transaction"`
+	IsPushNotification    bool       `json:"is_push_notification"`
+	IsLendCard            bool       `json:"is_lend_card"`
+	IsGiveCard            bool       `json:"is_give_card"`
+	IsWelcomeBonus        bool       `json:"is_welcome_bonus"`
+
+	MerchantName string `json:"merchant_name"`
+	OutletName   string `json:"outlet_name"`
+	CategoryName string `json:"category_name"`
 }
 
 type SpecialProgram struct {
-	Id                 int        `gorm:"AUTO_INCREMENT;PRIMARY_KEY;NOT NULL"; json:"id"'`
-	Created            time.Time  `json:"created"`
-	CreatedBy          string     `json:"created_by"`
-	Modified           time.Time  `json:"modified"`
-	ModifiedBy         string     `json:"modified_by"`
-	Active             bool       `json:"active"`
-	IsDeleted          bool       `json:"is_deleted"`
-	Deleted            *time.Time `json:"deleted"`
-	Deleted_by         string     `json:"deleted_by"`
-	ProgramName        string     `json:"program_name"`
-	ProgramImage       string     `json:"program_image"`
-	ProgramStartDate   time.Time  `json:"program_start_date"`
-	ProgramEndDate     time.Time  `json:"program_end_date"`
-	ProgramDescription string     `json:"program_description"`
-	Card               string     `json:"card"`
-	OutletID           string     `json:"outlet_id"`
-	MerchantId         int        `json:"merchant_id"`
-	//MerchantName       string     `json:"merchant_name"`
-	CategoryId            int     `json:"category_id"`
-	Benefit               string  `json:"benefit"`
-	TermsAndCondition     string  `json:"terms_and_condition"`
-	Tier                  string  `json:"tier"`
-	RedeemRules           string  `json:"redeem_rules"`
-	RewardTarget          float64 `json:"reward_target"`
-	QRCodeId              string  `json:"qr_code_id"`
-	IsReqBillNumber       bool    `json:"is_req_bill_number"`
-	IsReqTotalTransaction bool    `json:"is_req_total_transaction"`
-	IsPushNotification    bool    `json:"is_push_notification"`
-	IsLendCard            bool    `json:"is_lend_card"`
-	IsGiveCard            bool    `json:"is_give_card"`
-	IsWelcomeBonus        bool    `json:"is_welcome_bonus"`
+	Id                    int        `gorm:"AUTO_INCREMENT;PRIMARY_KEY;NOT NULL"; json:"id"'`
+	Created               time.Time  `json:"created"`
+	CreatedBy             string     `json:"created_by"`
+	Modified              time.Time  `json:"modified"`
+	ModifiedBy            string     `json:"modified_by"`
+	Active                bool       `json:"active"`
+	IsDeleted             bool       `json:"is_deleted"`
+	Deleted               *time.Time `json:"deleted"`
+	Deleted_by            string     `json:"deleted_by"`
+	ProgramName           string     `json:"program_name"`
+	ProgramImage          string     `json:"program_image"`
+	ProgramStartDate      time.Time  `json:"program_start_date"`
+	ProgramEndDate        time.Time  `json:"program_end_date"`
+	ProgramDescription    string     `json:"program_description"`
+	Card                  string     `json:"card"`
+	OutletID              int        `json:"outlet_id"`
+	MerchantEmail         string     `json:"merchant_email"`
+	CategoryId            int        `json:"category_id"`
+	Benefit               string     `json:"benefit"`
+	TermsAndCondition     string     `json:"terms_and_condition"`
+	Tier                  string     `json:"tier"`
+	RedeemRules           string     `json:"redeem_rules"`
+	RewardTarget          float64    `json:"reward_target"`
+	QRCodeId              string     `json:"qr_code_id"`
+	IsReqBillNumber       bool       `json:"is_req_bill_number"`
+	IsReqTotalTransaction bool       `json:"is_req_total_transaction"`
+	IsPushNotification    bool       `json:"is_push_notification"`
+	IsLendCard            bool       `json:"is_lend_card"`
+	IsGiveCard            bool       `json:"is_give_card"`
+	IsWelcomeBonus        bool       `json:"is_welcome_bonus"`
+
+	MerchantName string `json:"merchant_name"`
+	OutletName   string `json:"outlet_name"`
+	CategoryName string `json:"category_name"`
 }
 
 type Product struct {
@@ -254,8 +261,8 @@ type Product struct {
 	Deleted_by        string     `json:"deleted_by"`
 	ProductName       string     `json:"product_name"`
 	ProductDesc       string     `json:"product_desc"`
-	MerchantId        int        `gorm:"FOREIGNKEY"; json:"merchant_id"`
-	ProductCategoryId int        `gorm:"FOREIGNKEY"; json:"product_category_id"`
+	MerchantEmail     int        `json:"merchant_email"`
+	ProductCategoryId int        `json:"product_category_id"`
 }
 
 type ProductCategory struct {
@@ -285,7 +292,7 @@ type MerchantStatus struct {
 }
 
 type Employee struct {
-	Id            string     `gorm:"PRIMARY_KEY;NOT_NULL"; json:"id"`
+	Id            int        `gorm:"AUTO_INCREMENT;PRIMARY_KEY;NOT NULL"; json:"id"`
 	Created       time.Time  `json:"created"`
 	CreatedBy     string     `json:"created_by"`
 	Modified      time.Time  `json:"modified"`
@@ -298,8 +305,9 @@ type Employee struct {
 	EmployeeEmail string     `json:"employee_email"`
 	EmployeePin   string     `json:"employee_pin"`
 	EmployeeRole  string     `json:"employee_role"`
-	OutletId      string     `json:"outlet_id"`
-	OutletName    string     `json:"outlet_name"`
+	OutletId      int        `json:"outlet_id"`
+
+	OutletName string `json:"outlet_name"`
 }
 
 type TotalPoint struct {
@@ -320,15 +328,18 @@ type TransactionMerchant struct {
 	IsDeleted        bool       `json:"is_deleted"`
 	Deleted          *time.Time `json:"deleted"`
 	Deleted_by       string     `json:"deleted_by"`
-	MerchantId       int        `json:"merchant_id"`
-	OutletId         string     `json:"outlet_id"`
+	MerchantEmail    string     `json:"merchant_email"`
+	OutletId         int        `json:"outlet_id"`
 	TotalTransaction int        `json:"total_transaction"`
 	PointTransaction int        `json:"point_transaction"`
 	BillNumber       string     `json:"bill_number"`
+
+	MerchantName string `json:"merchant_name"`
+	OutletName   string `json:"outlet_name"`
 }
 
-type Card struct {
-	Id                string     `gorm:"PRIMARY_KEY;NOT NULL"; json:"id"`
+type ProgramCard struct {
+	Id                int        `gorm:"AUTO_INCREMENT;PRIMARY_KEY"; json:"id"`
 	Created           time.Time  `json:"created"`
 	CreatedBy         string     `json:"created_by"`
 	Modified          time.Time  `json:"modified"`
@@ -350,9 +361,12 @@ type Card struct {
 	ProgramId         int        `json:"program_id"`
 	CardType          string     `json:"card_type"`
 	IconImageStamp    string     `json:"icon_image_stamp"`
-	MerchantId        int        `json:"merchant_id"`
+	MerchantEmail     string     `json:"merchant_email"`
 	Tier              string     `json:"tier"`
 	TemplatePattern   string     `json:"template_pattern"`
+
+	ProgramName  string `json:"program_name"`
+	MerchantName string `json:"merchant_name"`
 }
 
 type Member struct {
@@ -362,7 +376,7 @@ type Member struct {
 }
 
 type Voucher struct {
-	Id                       string     `gorm:"PRIMARY_KEY;NOT NULL"; json:"id"`
+	Id                       int        `gorm:"AUTO_INCREMENT;PRIMARY_KEY;NOT NULL"; json:"id"`
 	Created                  time.Time  `json:"created"`
 	CreatedBy                string     `json:"created_by"`
 	Modified                 time.Time  `json:"modified"`
@@ -382,10 +396,13 @@ type Voucher struct {
 	RewardTermsAndCondition  string     `json:"reward_terms_and_condition"`
 	BackgroundVoucherPattern string     `json:"background_voucher"`
 	BackgroundVoucherColour  string     `json:"background_voucher_colour"`
-	MerchantId               string     `json:"merchant_id"`
-	OutletId                 string     `json:"outlet_id"`
+	MerchantEmail            string     `json:"merchant_email"`
+	OutletId                 int        `json:"outlet_id"`
 	ProgramId                int        `json:"program_id"`
-	isGive                   bool       `json:"is_give"`
+
+	MerchantName string `json:"merchant_name"`
+	OutletName   string `json:"outlet_name"`
+	ProgramName  string `json:"program_name"`
 }
 
 type Province struct {
@@ -400,7 +417,7 @@ type City struct {
 }
 
 type Reward struct {
-	Id                string     `gorm:"AUTO_INCREMENT;PRIMARY_KEY;NOT NULL"; json:"id"`
+	Id                int        `gorm:"AUTO_INCREMENT;PRIMARY_KEY;NOT NULL"; json:"id"`
 	Created           time.Time  `json:"created"`
 	CreatedBy         string     `json:"created_by"`
 	Modified          time.Time  `json:"modified"`
@@ -415,6 +432,11 @@ type Reward struct {
 	TermsAndCondition string     `json:"terms_and_condition"`
 	ProgramId         int        `json:"program_id"`
 	MerchantEmail     string     `json:"merchant_email"`
+	Outletid          int        `json:"outletid"`
+
+	MerchantName string `json:"merchant_name"`
+	ProgramName  string `json:"program_name"`
+	OutletName   string `json:"outlet_name"`
 }
 
 type Email struct {
@@ -457,37 +479,44 @@ type EmailEmployee struct {
 	EmployeePin   string `json:"employee_pin"`
 }
 
-type EmailForgetPass struct {
-	SenderEmail string           `json:"sender_email"`
-	SenderName  string           `json:"sender_name"`
-	Receiver    []ReceiverStruct `json:"receiver"`
-	Subject     string           `json:"subject"`
-	Body        string           `json:"body"`
-	TextContent string           `json:"text_content"`
+func (r *EmailEmployee) ParseTemplate(templateFileName string, data interface{}) (string, error) {
+	t, err := template.ParseFiles(fmt.Sprintf("src/api/SendGrid/%s", templateFileName))
+	if err != nil {
+		fmt.Println("Error : ", err.Error())
+		return "error", err
+	}
+	buf := new(bytes.Buffer)
+	if err = t.Execute(buf, data); err != nil {
+		fmt.Println("error exec : ", err.Error())
+		return "nil", err
+	}
+	r.Body = buf.String()
+	return buf.String(), nil
 }
 
-type Customer struct {
-	Id           string     `gorm:"AUTO_INCREMENT;PRIMARY_KEY;NOT NULL"; json:"Id"`
-	CreatedDate  time.Time  `json:"CreatedDate"`
-	CreatedBy    string     `json:"CreatedBy"`
-	ModifiedDate time.Time  `json:"ModifiedDate"`
-	ModifiedBy   string     `json:"ModifiedBy"`
-	Active       bool       `json:"Active"`
-	IsDeleted    bool       `json:"IsDeleted"`
-	DeletedDate  *time.Time `json:"DeletedDate"`
-	DeletedBy    string     `json:"DeletedBy"`
+type EmailForgetPass struct {
+	SenderEmail   string `json:"sender_email"`
+	SenderName    string `json:"sender_name"`
+	ReceiverName  string `json:"receiver_name"`
+	ReceiverEmail string `json:"receiver_email"`
+	Subject       string `json:"subject"`
+	Body          string `json:"body"`
+	TextContent   string `json:"text_content"`
+}
 
-	FirstName        string    `json:"FirstName"`
-	LastName         string    `json:"LastName"`
-	PhoneNumber      string    `json:"PhoneNumber"`
-	UserEmail        string    `json:"UserEmail"`
-	Gender           string    `json:"Gender"`
-	BirthDate        time.Time `json:"BirthDate"`
-	ProfilePict      string    `json:"ProfilePict"`
-	ReferralCode     string    `json:"ReferralCode"`
-	UsedReferralCode string    `json:"UsedReferralCode"`
-	DomicileCity     string    `json:"DomicileCity"`
-	UserId           string    `json:"UserId"`
+func (r *EmailForgetPass) ParseTemplate(templateFileName string, data interface{}) (string, error) {
+	t, err := template.ParseFiles(fmt.Sprintf("src/api/SendGrid/%s", templateFileName))
+	if err != nil {
+		fmt.Println("Error : ", err.Error())
+		return "error", err
+	}
+	buf := new(bytes.Buffer)
+	if err = t.Execute(buf, data); err != nil {
+		fmt.Println("error exec : ", err.Error())
+		return "nil", err
+	}
+	r.Body = buf.String()
+	return buf.String(), nil
 }
 
 type From struct {

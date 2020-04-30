@@ -32,6 +32,7 @@ func UplodBytesToBlob(b []byte)(string, error) {
 	fmt.Println("masuk kesini")
 	azrKey, accountName, endPoint, container := GetAccountInfo()
 	u, err := url.Parse(fmt.Sprint(endPoint, container, "/", GetBlobName()))
+	fmt.Println("U : ", u  )
 	if err != nil {
 		fmt.Println("Error parse : ", err.Error())
 	}
@@ -41,7 +42,7 @@ func UplodBytesToBlob(b []byte)(string, error) {
 	}
 
 	blockBlobUrl := azblob.NewBlockBlobURL(*u, azblob.NewPipeline(credential, azblob.PipelineOptions{}))
-	fmt.Println(blockBlobUrl)
+	fmt.Println("blobURL : ",blockBlobUrl)
 	ctx := context.Background()
 	o := azblob.UploadToBlockBlobOptions{
 		BlobHTTPHeaders: azblob.BlobHTTPHeaders{

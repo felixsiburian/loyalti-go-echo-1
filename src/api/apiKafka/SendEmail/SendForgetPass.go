@@ -14,23 +14,15 @@ import (
 func PublishSendForgetPassword(c echo.Context) error {
 	fmt.Println("masuk ke send pin")
 	//var data model.Merchant
-	data := new(model.Emails)
+	data := new(model.EmailForgetPass)
 	err := json.NewDecoder(c.Request().Body).Decode(&data)
 	//err := c.Bind(data)
 	if err != nil {
 		return c.String(http.StatusBadRequest, err.Error())
 		panic(err)
 	}
-	data.TemplateId = "d-0d023aa0bd5544bc8038c314c6b289cb"
+	//data.TemplateId = "d-0d023aa0bd5544bc8038c314c6b289cb"
 	fmt.Println(data)
-
-	//if len(data.MerchantEmail) == 0 && len(data.MerchantName) == 0 {
-	//	return c.String(http.StatusBadRequest, "Nama dan Email kosong")
-	//} else if len(data.MerchantEmail) == 0 {
-	//	return c.String(http.StatusBadRequest, "Email tidak boleh kosong")
-	//} else if len(data.MerchantName) == 0 {
-	//	return c.String(http.StatusBadRequest, "Name tidak boleh kosong")
-	//}
 
 	kafkaConfig := Config.GetKafkaConfig("", "")
 

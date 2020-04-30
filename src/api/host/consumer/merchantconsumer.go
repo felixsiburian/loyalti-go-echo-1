@@ -7,9 +7,6 @@ import (
 	"github.com/radyatamaa/loyalti-go-echo/src/api/host/Config"
 	"github.com/radyatamaa/loyalti-go-echo/src/domain/model"
 	"github.com/radyatamaa/loyalti-go-echo/src/domain/repository"
-	"io/ioutil"
-	"log"
-	"net/http"
 	"os"
 	"os/signal"
 	"strings"
@@ -43,7 +40,7 @@ func consume(topics []string, master sarama.Consumer) (chan *sarama.ConsumerMess
 				case msg := <-consumer.Messages():
 					//*messageCountStart++
 					//Deserialize
-					merchant := model.NewMerchantCommand{}
+					merchant := model.Merchant{}
 					switch msg.Topic {
 					case "create-merchant-topic":
 						fmt.Println("masuk ke create merchant")
@@ -52,7 +49,6 @@ func consume(topics []string, master sarama.Consumer) (chan *sarama.ConsumerMess
 							fmt.Println(err.Error())
 							os.Exit(1)
 						}
-						resp , err := repository.CreateMerchantWSO2(&merchant)
 						repository.CreateMerchant2(&merchant)
 						fmt.Println("masuk ke fungsi WSO2")
 						if err != nil {
@@ -60,28 +56,6 @@ func consume(topics []string, master sarama.Consumer) (chan *sarama.ConsumerMess
 							os.Exit(1)
 						}
 						//os.Exit(1)
-						if resp.StatusCode != http.StatusCreated {
-							bodyBytes, err := ioutil.ReadAll(resp.Body)
-							if err != nil {
-								fmt.Println("Error :",err.Error())
-								log.Fatal(err)
-								os.Exit(1)
-							}
-							bodyString := string(bodyBytes)
-							fmt.Println(bodyString)
-						}
-						fmt.Println("ini respon")
-						bodyBytes, err := ioutil.ReadAll(resp.Body)
-						if err != nil {
-							fmt.Println("Error :",err.Error())
-							log.Fatal(err)
-							os.Exit(1)
-						}
-						bodyString := string(bodyBytes)
-						fmt.Println(bodyString)
-
-						fmt.Println(string(msg.Value))
-						fmt.Println("Berhasil Masuk Ke WSO2  asdas")
 						fmt.Println("Merchant berhasil dibuat")
 						break
 

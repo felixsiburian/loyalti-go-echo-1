@@ -3,6 +3,8 @@ package SendGrid
 import (
 	//"encoding/json"
 	"fmt"
+	"log"
+
 	//"github.com/labstack/echo"
 	"github.com/sendgrid/sendgrid-go"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
@@ -27,9 +29,12 @@ func SendPin(email *model.EmailEmployee) error {
 	subject := e.Subject
 	fmt.Println("masuk ke perulangan")
 	to := mail.NewEmail(e.EmployeeName, e.EmployeeEmail)
-	fmt.Println("Isi to : ", to)
+	fmt.Println("Ii to : ", to)
 	plainTextContent := "abcd"
-	htmlContent := "Hi , " + e.EmployeeName + "You've been invited to " + "<b>LoyaltiExpress</b>." + "This is yout PIN : " + e.EmployeePin
+	htmlContent,err := e.ParseTemplate("CashierPINEmailTemplate.html", e)
+	if err != nil {
+		log.Fatal(err)
+	}
 	fmt.Println("isi HTML Content : ", htmlContent)
 	message := mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
 	client := sendgrid.NewSendClient(a)

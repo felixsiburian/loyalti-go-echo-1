@@ -1,37 +1,30 @@
 package repository
 
 import (
-	"bytes"
-	"github.com/beevik/guid"
-	"github.com/biezhi/gorm-paginator/pagination"
-	"github.com/jinzhu/gorm"
-
-	"encoding/json"
+	"database/sql"
 	"fmt"
+	"github.com/jinzhu/gorm"
+	"github.com/labstack/gommon/log"
 
 	_ "github.com/go-sql-driver/mysql"
 
 	_ "github.com/jinzhu/gorm/dialects/mssql"
 	"github.com/radyatamaa/loyalti-go-echo/src/database"
 	"github.com/radyatamaa/loyalti-go-echo/src/domain/model"
-	//"github.com/stretchr/testify/require"
-
-	"net/http"
-	"os"
 	"time"
 )
 
 type Repository interface {
-	CreateMerchant (newmerchant *model.NewMerchantCommand) error
-	UpdateMerchant(newmerchant *model.NewMerchantCommand) error
-	DeleteMerchant(newmerchant *model.NewMerchantCommand) error
+	CreateMerchant(newmerchant *model.Merchant) error
+	UpdateMerchant(newmerchant *model.Merchant) error
+	DeleteMerchant(newmerchant *model.Merchant) error
 }
 
 type repo struct {
 	DB *gorm.DB
 }
 
-func (p *repo) CreateMerchant (newmerchant *model.NewMerchantCommand) error {
+func (p *repo) CreateMerchant(newmerchant *model.Merchant) error {
 	merchant := model.Merchant{
 		Created:               time.Now(),
 		CreatedBy:             "",
@@ -65,48 +58,11 @@ func (p *repo) CreateMerchant (newmerchant *model.NewMerchantCommand) error {
 
 func CreateRepository(db *gorm.DB) Repository {
 	return &repo{
-		DB:db,
+		DB: db,
 	}
 }
 
-func CreateMerchantWSO2(newmerchant *model.NewMerchantCommand) (*http.Response, error) {
-	user := model.AccountMerchant{
-		Id: guid.NewString(),
-		Username: newmerchant.MerchantEmail,
-		Password: newmerchant.MerchantPassword,
-		Email: newmerchant.MerchantEmail,
-	}
-	data, _:= json.Marshal(user)
-	fmt.Println("Ini datanya : ",string(data))
-
-	req, err := http.NewRequest("POST", "https://identityserver-loyalti.azurewebsites.net/connect/register", bytes.NewReader(data))
-	fmt.Println("ini isi bytes reader : ",)
-	fmt.Println(bytes.NewReader(data))
-	//os.Exit(1)
-	req.Header.Set("Authorization", "Basic YWRtaW5AZ21haWwuY29tOmFkbWlu")
-	req.Header.Set("Content-Type","application/json")
-	if err != nil {
-		fmt.Println("Error : ", err.Error())
-		os.Exit(1)
-	}
-
-	//tr := &http.Transport{
-	//	TLSClientConfig: &tls.Config{InsecureSkipVerify:true},
-	//}
-
-	//client := &http.Client{Transport: tr}
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		fmt.Println("Error : ", err.Error())
-		os.Exit(1)
-	}
-	fmt.Println("ini response : ", resp)
-	//os.Exit(1)
-	return resp, err
-}
-
-func  CreateMerchant2 (newmerchant *model.NewMerchantCommand) string {
+func CreateMerchant2(newmerchant *model.Merchant) string {
 	merchant := model.Merchant{
 		Created:               time.Now(),
 		CreatedBy:             "",
@@ -136,7 +92,7 @@ func  CreateMerchant2 (newmerchant *model.NewMerchantCommand) string {
 	return merchant.MerchantEmail
 }
 
-func (p *repo) UpdateMerchant(newmerchant *model.NewMerchantCommand) error {
+func (p *repo) UpdateMerchant(newmerchant *model.Merchant) error {
 	db := database.ConnectionDB()
 	merchant := model.Merchant{
 		Created:               time.Time{},
@@ -165,7 +121,7 @@ func (p *repo) UpdateMerchant(newmerchant *model.NewMerchantCommand) error {
 	return err
 }
 
-func UpdateMerchant2(newmerchant *model.NewMerchantCommand) string {
+func UpdateMerchant2(newmerchant *model.Merchant) string {
 	db := database.ConnectionDB()
 	merchant := model.Merchant{
 		Created:               time.Time{},
@@ -189,13 +145,14 @@ func UpdateMerchant2(newmerchant *model.NewMerchantCommand) string {
 		MerchantDescription:   newmerchant.MerchantDescription,
 		MerchantImageProfile:  newmerchant.MerchantImageProfile,
 		MerchantGallery:       newmerchant.MerchantGallery,
+		CategoryName:          "a",
 	}
 	db.Model(&merchant).Where("merchant_email = ?", merchant.MerchantEmail).Update(&merchant)
 	defer db.Close()
 	return merchant.MerchantEmail
 }
 
-func (p *repo) DeleteMerchant(newmerchant *model.NewMerchantCommand) error {
+func (p *repo) DeleteMerchant(newmerchant *model.Merchant) error {
 	db := database.ConnectionDB()
 	merchant := model.Merchant{
 		Created:               time.Time{},
@@ -227,7 +184,7 @@ func (p *repo) DeleteMerchant(newmerchant *model.NewMerchantCommand) error {
 	return err
 }
 
-func DeleteMerchant2(newmerchant *model.NewMerchantCommand) string {
+func DeleteMerchant2(newmerchant *model.Merchant) string {
 	db := database.ConnectionDB()
 	merchant := model.Merchant{
 		Created:               time.Time{},
@@ -253,6 +210,7 @@ func DeleteMerchant2(newmerchant *model.NewMerchantCommand) string {
 		MerchantGallery:       newmerchant.MerchantGallery,
 	}
 	db.Model(&merchant).Where("merchant_email = ?", merchant.MerchantEmail).Update("active", false)
+	db.Model(&merchant).Where("merchant_email = ?", merchant.MerchantEmail).Update("is_deleted", true)
 	defer db.Close()
 	return "berhasil dihapus"
 }
@@ -260,67 +218,120 @@ func DeleteMerchant2(newmerchant *model.NewMerchantCommand) string {
 func GetMerchant(page *int, size *int, sort *int, email *string) []model.Merchant {
 	fmt.Println("masuk ke Fungsi Get")
 	db := database.ConnectionDB()
-	//db := database.ConnectPostgre()
 	var merchant []model.Merchant
-	db.Find(&merchant)
+	var rows *sql.Rows
+	var err error
+	var total int
 
-	if page == nil && size == nil && sort == nil && email == nil {
-		fmt.Println("masuk 1")
-		db.Model(&merchant).Find(&merchant)
-		defer db.Close()
-	}
-
-	if page != nil && size != nil && sort != nil && email == nil {
-		fmt.Println("masuk 2", email)
-		db.Find(&merchant)
-		switch *sort {
-		case 1 :
-				pagination.Paging(&pagination.Param{
-					DB:      db,
-					Page:    *page,
-					Limit:   *size,
-					OrderBy: []string{"merchant_name desc"},
-				}, &merchant)
-
-		case 2 :
-				pagination.Paging(&pagination.Param{
-					DB:      db,
-					Page:    *page,
-					Limit:   *size,
-					OrderBy: []string{"merchant_name asc"},
-				}, &merchant)
+	if (page == nil && size == nil && sort == nil && email == nil) {
+		rows, err = db.Find(&merchant).Rows()
+		if err != nil {
+			log.Fatal(err)
 		}
-		defer db.Close()
 	}
 
-	if page != nil && size != nil && sort != nil && email != nil {
-		fmt.Println("masuk 3")
-		db.Model(&merchant).Where("merchant_email = ? ", email).Find(&merchant)
+	if (page != nil && size != nil && sort != nil && email == nil) {
 		switch *sort {
-		case 1 :
-				pagination.Paging(&pagination.Param{
-					DB:      db,
-					Page:    *page,
-					Limit:   *size,
-					OrderBy: []string{"merchant_name desc"},
-				}, &merchant)
-		case 2 :
-			pagination.Paging(&pagination.Param{
-				DB:      db,
-				Page:    *page,
-				Limit:   *size,
-				OrderBy: []string{"merchant_name asc"},
-			}, &merchant)
+		case 1:
+			rows, err = db.Find(&merchant).Order("merchant_name asc").Count(total).Limit(*size).Offset(*page).Rows()
+			if err != nil {
+				log.Fatal(err)
+			}
+		case 2:
+			rows, err = db.Find(&merchant).Order("merchant_name desc").Count(total).Limit(*size).Offset(*page).Rows()
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
-		defer db.Close()
 	}
 
-	if page == nil && size == nil && sort == nil && email != nil {
-		fmt.Println("masuk 4")
-		db.Model(&merchant).Where("merchant_email =  ?", email).Find(&merchant)
-		defer db.Close()
+	if (page != nil && size != nil && sort != nil && email != nil) {
+		switch *sort {
+		case 1:
+			rows, err = db.Find(&merchant).Where("merchant_email = ?", email).Order("merchant_name asc").Count(total).Limit(*size).Offset(*page).Rows()
+			if err != nil {
+				log.Fatal(err)
+			}
+		case 2:
+			rows, err = db.Find(&merchant).Where("merchant_email = ?", email).Order("merchant_name asc").Count(total).Limit(*size).Offset(*page).Rows()
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
+	}
+
+	if (page != nil && size != nil && sort != nil && email == nil) {
+		switch *sort {
+		case 1:
+			rows, err = db.Find(&merchant).Order("merchant_name asc").Count(total).Limit(*size).Offset(*page).Rows()
+			if err != nil {
+				log.Fatal(err)
+			}
+		case 2:
+			rows, err = db.Find(&merchant).Order("merchant_name desc").Count(total).Limit(*size).Offset(*page).Rows()
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
+	}
+
+	if page != nil && size != nil {
+		rows, err = db.Find(&merchant).Count(total).Limit(*size).Offset(*page).Order("merchant_name asc").Rows()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	if (page == nil && size == nil && sort == nil && email != nil) {
+		rows, err = db.Find(&merchant).Where("merchant_email = ?", email).Order("merchant_name asc").Count(total).Rows()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	result := make([]model.Merchant, 0)
+	fmt.Println("lewat")
+	for rows.Next() {
+		fmt.Println("masuk")
+		m := &model.Merchant{}
+		err = rows.Scan(
+			&m.Id,
+			&m.Created,
+			&m.CreatedBy,
+			&m.Modified,
+			&m.ModifiedBy,
+			&m.Active,
+			&m.IsDeleted,
+			&m.Deleted,
+			&m.Deleted_by,
+			&m.MerchantName,
+			&m.MerchantEmail,
+			&m.MerchantPhoneNumber,
+			&m.MerchantProvince,
+			&m.MerchantCity,
+			&m.MerchantAddress,
+			&m.MerchantPostalCode,
+			&m.MerchantCategoryId,
+			&m.MerchantWebsite,
+			&m.MerchantMediaSocialId,
+			&m.MerchantDescription,
+			&m.MerchantImageProfile,
+			&m.MerchantGallery,
+			&m.CategoryName,
+		)
+
+		category := new(model.MerchantCategory)
+		db.Table("merchant_categories").Select("merchant_categories.category_name").
+			Where("id = ? ", m.MerchantCategoryId).First(&category)
+
+		m.CategoryName = category.CategoryName
+
+		if err != nil {
+			log.Fatal(err)
+		}
+		result = append(result, *m)
 	}
 
 	defer db.Close()
-	return merchant
+	return result
 }

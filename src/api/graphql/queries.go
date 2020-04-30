@@ -152,12 +152,13 @@ func NewRoot() *Root {
 							"category": &graphql.ArgumentConfig{
 								Type: graphql.Int,
 							},
-							"id": &graphql.ArgumentConfig{
-								Type: graphql.Int,
+							"email": &graphql.ArgumentConfig{
+								Type: graphql.String,
 							},
 						},
 						Resolve: ProgramResolver,
 					},
+
 					"special": &graphql.Field{
 						Type: graphql.NewList(specialprogramType),
 						Args: graphql.FieldConfigArgument{
@@ -173,8 +174,8 @@ func NewRoot() *Root {
 							"category": &graphql.ArgumentConfig{
 								Type: graphql.Int,
 							},
-							"id": &graphql.ArgumentConfig{
-								Type: graphql.Int,
+							"email": &graphql.ArgumentConfig{
+								Type: graphql.String,
 							},
 						},
 						Resolve: SpecialProgramResolver,
@@ -225,7 +226,7 @@ func NewRoot() *Root {
 								Type: graphql.String,
 							},
 							"outletid": &graphql.ArgumentConfig{
-								Type: graphql.String,
+								Type: graphql.Int,
 							},
 							"cardtype": &graphql.ArgumentConfig{
 								Type: graphql.String,
@@ -246,7 +247,7 @@ func NewRoot() *Root {
 								Type: graphql.String,
 							},
 							"outletid": &graphql.ArgumentConfig{
-								Type: graphql.String,
+								Type: graphql.Int,
 							},
 							"cardtype": &graphql.ArgumentConfig{
 								Type: graphql.String,
@@ -267,7 +268,7 @@ func NewRoot() *Root {
 								Type: graphql.Int,
 							},
 							"outletid": &graphql.ArgumentConfig{
-								Type: graphql.String,
+								Type: graphql.Int,
 							},
 						},
 						Resolve: TransactionResolver,
@@ -299,8 +300,8 @@ func NewRoot() *Root {
 							"size": &graphql.ArgumentConfig{
 								Type: graphql.Int,
 							},
-							"merchant_id": &graphql.ArgumentConfig{
-								Type: graphql.Int,
+							"merchant_email": &graphql.ArgumentConfig{
+								Type: graphql.String,
 							},
 							"sort": &graphql.ArgumentConfig{
 								Type: graphql.Int,

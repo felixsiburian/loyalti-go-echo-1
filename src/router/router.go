@@ -71,12 +71,12 @@ func New() *echo.Echo {
 
 	//Kafka Outlet
 	e.POST("/create-outlet", Outlet.PublishCreateOutlet)
-	e.POST("update-outlet", Outlet.PublishUpdateOutlet)
+	e.POST("/update-outlet", Outlet.PublishUpdateOutlet)
 	e.POST("/delete-outlet", Outlet.PublishDeleteOutlet)
 
 	//Kafka Program
 	e.POST("/create-program", Program.PublishCreateProgram)
-	e.POST("/update-program ", Program.PublishUpdateProgram)
+	e.POST("/update-program", Program.PublishUpdateProgram)
 	e.POST("/delete-program", Program.PublishDeleteProgram)
 
 	//Kafka Special Program
@@ -97,7 +97,7 @@ func New() *echo.Echo {
 	//Kafka Reward Merchant
 	e.POST("/create-reward", Reward.PublishCreateReward)
 	e.POST("/update-reward", Reward.PublishUpdateReward)
-	e.POST("/delete-reward", Reward.PublishUpdateReward)
+	e.POST("/delete-reward", Reward.PublishDeleteReward)
 
 	//Kafka Customer By admin
 	//Get Token

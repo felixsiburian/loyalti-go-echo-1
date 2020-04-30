@@ -15,14 +15,7 @@ func SendMail(email *model.Email) error {
 	e := email
 	fmt.Println("email : ", email)
 	fmt.Println("e : ", e)
-	//err := json.NewDecoder(c.Request().Body).Decode(&e)
-	//if err != nil {
-	//	fmt.Println("Error SendGrid : ", err.Error())
-	//}
 
-	//var e Email
-	//var a = fmt.Sprintf("%s", viper.Get("SENDGRIDKEY"))
-	//fmt.Println(a)
 	var a = "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"
 	from := mail.NewEmail(e.SenderName, e.SenderEmail)
 	subject := e.Subject

@@ -12,6 +12,7 @@ import (
 )
 
 func PublishDeleteProgram(c echo.Context) error {
+	fmt.Println("masuk ke delete")
 	//var data model.Merchant
 	data := new(model.Program)
 	err := json.NewDecoder(c.Request().Body).Decode(&data)

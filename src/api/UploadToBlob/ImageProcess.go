@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/labstack/echo"
 	"io"
+	"net/http"
 	"os"
 )
 
@@ -42,5 +43,5 @@ func ProcessImage(c echo.Context) error {
 	//fmt.Println("isi out : ", file)
 	//fmt.Println("isi in : ", buf)
 	//do other stuff
-	return nil
+	return c.JSON(http.StatusOK, "berhasil di upload")
 }

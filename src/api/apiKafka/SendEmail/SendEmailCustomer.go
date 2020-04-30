@@ -13,22 +13,15 @@ import (
 
 func PublishSendEmailCustomer(c echo.Context) error {
 	//var data model.Merchant
-	data := new(model.Emails)
+	data := new(model.Email)
 	err := json.NewDecoder(c.Request().Body).Decode(&data)
 	//err := c.Bind(data)
 	if err != nil {
 		return c.String(http.StatusBadRequest, err.Error())
 		panic(err)
 	}
-	data.TemplateId = "d-287e301e6f0b4d29b4f7f1143bc9697c"
+	//data.TemplateId = "d-287e301e6f0b4d29b4f7f1143bc9697c"
 	fmt.Println(data)
-	//if len(data.MerchantEmail) == 0 && len(data.MerchantName) == 0 {
-	//	return c.String(http.StatusBadRequest, "Nama dan Email kosong")
-	//} else if len(data.MerchantEmail) == 0 {
-	//	return c.String(http.StatusBadRequest, "Email tidak boleh kosong")
-	//} else if len(data.MerchantName) == 0 {
-	//	return c.String(http.StatusBadRequest, "Name tidak boleh kosong")
-	//}
 
 	kafkaConfig := Config.GetKafkaConfig("", "")
 

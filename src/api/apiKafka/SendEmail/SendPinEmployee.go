@@ -14,15 +14,15 @@ import (
 func PublishSendPinEmployee(c echo.Context) error {
 	fmt.Println("masuk ke send pin")
 	//var data model.Merchant
-	data := new(model.Emails)
+	data := new(model.EmailEmployee)
 	err := json.NewDecoder(c.Request().Body).Decode(&data)
 	//err := c.Bind(data)
 	if err != nil {
 		return c.String(http.StatusBadRequest, err.Error())
 		panic(err)
 	}
-	data.TemplateId = "d-17b78e1c4b014eca920c0858207da30f"
-	data.Personalization[0].DynamicTemplateData.Body = "You've been invited to " + "LoyaltiExpress. " + "This is your PIN :"
+	//data.TemplateId = "d-17b78e1c4b014eca920c0858207da30f"
+	//data.Personalization[0].DynamicTemplateData.Body = "You've been invited to " + "LoyaltiExpress. " + "This is your PIN :"
 	fmt.Println(data)
 
 	//if len(data.MerchantEmail) == 0 && len(data.MerchantName) == 0 {

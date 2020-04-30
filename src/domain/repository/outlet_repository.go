@@ -1,18 +1,23 @@
 package repository
 
 import (
+	"database/sql"
 	"fmt"
-	"github.com/biezhi/gorm-paginator/pagination"
+	"github.com/labstack/gommon/log"
+	"time"
+
+	//"github.com/biezhi/gorm-paginator/pagination"
+
+	//"github.com/biezhi/gorm-paginator/pagination"
 	"github.com/jinzhu/gorm"
 	"github.com/radyatamaa/loyalti-go-echo/src/database"
 	"github.com/radyatamaa/loyalti-go-echo/src/domain/model"
-	"time"
 )
 
 type OutletRepository interface {
-	CreateOutlet(newoutlet *model.Outlet) error
-	UpdateOutlet(newoutlet *model.Outlet) error
-	DeleteOutlet(newoutlet *model.Outlet) error
+	CreateOutlet(newoutlet *model.Outlet2) error
+	UpdateOutlet(newoutlet *model.Outlet2) error
+	DeleteOutlet(newoutlet *model.Outlet2) error
 }
 
 type outlet_repo struct {
@@ -85,7 +90,7 @@ type outlet_repo struct {
 //	return err
 //}
 
-func (p *outlet_repo) DeleteOutlet(newoutlet *model.Outlet) error {
+func (p *outlet_repo) DeleteOutlet(newoutlet *model.Outlet2) error {
 	db := database.ConnectionDB()
 
 	err := db.Model(&newoutlet).Where("id = ?", newoutlet.Id).Update("active", false).Error
@@ -95,114 +100,157 @@ func (p *outlet_repo) DeleteOutlet(newoutlet *model.Outlet) error {
 	return err
 }
 
-func CreateOutlet(outlet *model.Outlet) string {
+func CreateOutlet(outlet *model.Outlet2) string {
 	db := database.ConnectionDB()
-	outlet.Created = time.Now()
-	outlet.Modified = time.Now()
-	outletObj := *outlet
+	outletObj := model.Outlet2{
+		Created:          time.Now(),
+		CreatedBy:        "Admin",
+		Modified:         time.Now(),
+		ModifiedBy:       "Admin",
+		Active:           true,
+		IsDeleted:        false,
+		Deleted:          nil,
+		Deleted_by:       "",
+		OutletName:       outlet.OutletName,
+		OutletAddress:    outlet.OutletAddress,
+		OutletPhone:      outlet.OutletPhone,
+		OutletCity:       outlet.OutletCity,
+		OutletProvince:   outlet.OutletProvince,
+		OutletPostalCode: outlet.OutletPostalCode,
+		OutletLongitude:  outlet.OutletLongitude,
+		OutletLatitude:   outlet.OutletLatitude,
+		OutletDay:        time.Time{},
+		OutletHour:       time.Time{},
+		MerchantEmail:    outlet.MerchantEmail,
+		Timezone:         outlet.Timezone,
+		MerchantName:     "a",
+	}
 
 	db.Create(&outletObj)
 	defer db.Close()
 	return outletObj.OutletName
 }
 
-func UpdateOutlet(outlet *model.Outlet) string {
+func UpdateOutlet(outlet *model.Outlet2) string {
 	db := database.ConnectionDB()
-	db.Model(&outlet).Where("id = ?", outlet.Id).Update(&outlet)
+	db.Model(&outlet).Updates(map[string]interface{}{
+		"outlet_name": outlet.OutletName,
+		"outlet_address":outlet.OutletAddress,
+		"outlet_phone":outlet.OutletPhone,
+		"outlet_city":outlet.OutletCity,
+		"outlet_province":outlet.OutletProvince,
+		"outlet_postal_code": outlet.OutletPostalCode,
+		"outlet_longitude": outlet.OutletLongitude,
+		"outlet_latitude": outlet.OutletLatitude,
+		"outlet_day":outlet.OutletDay,
+		"outlet_hour":outlet.OutletHour,
+		"merchant_email":outlet.MerchantEmail,
+		"timezone":outlet.Timezone,
+	})
 	defer db.Close()
 	return outlet.OutletName
 }
 
-func DeleteOutlet(outlet *model.Outlet) string {
+func DeleteOutlet(outlet *model.Outlet2) string {
 	db := database.ConnectionDB()
 	db.Model(&outlet).Where("id= ?", outlet.Id).Update("active", false)
+	db.Model(&outlet).Where("id= ?", outlet.Id).Update("is_deleted", true)
 	defer db.Close()
 	return "berhasil dihapus"
 }
 
-func GetOutlet(page *int, size *int, id *int, email *string) []model.Outlet {
+func GetOutlet(page *int, size *int, id *int, email *string) []model.Outlet2 {
 	fmt.Println("masuk ke get outlet")
 	db := database.ConnectionDB()
-	//db := database.ConnectPostgre()
-	var outlet []model.Outlet
-	//var result map[string]interface{}
+	var outlet []model.Outlet2
+	var rows *sql.Rows
+	var err error
+	var total int
 
-	db.Find(&outlet)
-	fmt.Println("lewat 1")
-	if id == nil && size == nil && page == nil && email == nil {
-		fmt.Println("1")
-		db.Model(&outlet).Find(&outlet)
-		fmt.Println("habis")
+	if page == nil && size == nil && id == nil && email == nil {
+		rows, err = db.Find(&outlet).Order("outlet_name asc").Rows()
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
-	fmt.Println("lewat 2")
-	if id == nil && size != nil && page != nil && email != nil {
-		fmt.Println("2")
-		db.Model(&outlet).Where("merchant_email = ?", email).Limit(*size).Offset(*page).Find(&outlet)
-		db.Model(&outlet).Find(&outlet)
-		pagination.Paging(&pagination.Param{
-			DB:      db,
-			Page:    *page,
-			Limit:   *size,
-			OrderBy: []string{"outlet_name desc"},
-		}, &outlet)
-	}
-	fmt.Println("lewat 3")
-	if id == nil && size != nil && page != nil && email == nil {
-		fmt.Println("3")
-		db.Model(&outlet).Find(&outlet)
-		pagination.Paging(&pagination.Param{
-			DB:      db,
-			Page:    *page,
-			Limit:   *size,
-			OrderBy: []string{"outlet_name asc"},
-		}, &outlet)
-	}
-	fmt.Println("lewat 4")
-	if id != nil && size != nil && page != nil && email == nil {
-		fmt.Println("4")
-		db.Model(&outlet).Where("merchant_id =  ?", id).Find(&outlet)
-		pagination.Paging(&pagination.Param{
-			DB:      db,
-			Page:    *page,
-			Limit:   *size,
-			OrderBy: []string{"outlet_name asc"},
-		}, &outlet)
-	}
-	fmt.Println("lewat 5")
-	//rows,err := db.Table("merchants").Select("merchants.merchant_name, outlets.outlet_name").Joins("left join outlets on outlets.merchant_email = merchants.merchant_email").Rows()
-	//if err != nil {
-	//	fmt.Println("Error join : ", err.Error())
-	//	os.Exit(1)
-	//}
-	//
-	//result := make([]model.Outlet, 0)
-	//
-	//for rows.Next() {
-	//	fmt.Println("masuk ke perulangan")
-	//	o := &model.Outlet{}
-	//
-	//	err = rows.Scan(
-	//		&o.OutletName,
-	//		&o.MerchantEmail,
-	//		)
-	//
-	//	outlet := new (model.Outlet)
-	//	db.Table("merchants").
-	//		Select("merchants.merchant_name").
-	//		Where("merchant_email = ?", o.MerchantEmail).
-	//		First(&outlet)
-	//
-	//	if err != nil {
-	//		fmt.Println("error join 2 : ", err.Error())
-	//		log.Fatal(err)
-	//	}
-	//	result = append(result, *o)
-	//	fmt.Println(result)
-	//}
-	//
-	//res := db.Table("merchants").Select("merchants.merchant_name, outlets.outlet_name").Joins("left join outlets on outlets.merchant_email = merchants.merchant_email").Scan(&result)
-	//fmt.Println(res)
 
+	if page != nil && size != nil && id != nil && email != nil {
+		rows, err = db.Find(&outlet).Where("merchant_email = ? AND id = ?", email, id).Order("outlet_name asc").Rows()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	if page != nil && size != nil && email != nil && id == nil {
+		rows, err = db.Find(&outlet).Where("merchant_email = ?", email).Order("outlet_name asc").Order(total).Limit(*size).Offset(*page).Rows()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	if page != nil && size != nil && email == nil && id != nil {
+		rows, err = db.Find(&outlet).Where("id = ? ", id).Order("outlet_name asc").Order(total).Limit(*size).Offset(*page).Rows()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	if page != nil && size != nil && email == nil && id == nil {
+		rows, err = db.Find(&outlet).Order("outlet_name asc").Count(total).Limit(*size).Offset(*page).Rows()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	if page == nil && size == nil && id == nil && email != nil {
+		rows, err = db.Find(&outlet).Where("merchant_email = ?", email).Order("outlet_name asc").Count(total).Rows()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+		result := make([]model.Outlet2, 0)
+	fmt.Println("lewat")
+	for rows.Next() {
+		fmt.Println("masuk")
+		o := &model.Outlet2{}
+		fmt.Println(o)
+
+		err = rows.Scan(
+			&o.Id,
+			&o.Created,
+			&o.CreatedBy,
+			&o.Modified,
+			&o.ModifiedBy,
+			&o.Active,
+			&o.IsDeleted,
+			&o.Deleted,
+			&o.Deleted_by,
+			&o.OutletName,
+			&o.OutletAddress,
+			&o.OutletPhone,
+			&o.OutletCity,
+			&o.OutletProvince,
+			&o.OutletPostalCode,
+			&o.OutletLongitude,
+			&o.OutletLatitude,
+			&o.OutletDay,
+			&o.OutletHour,
+			&o.MerchantEmail,
+			&o.Timezone,
+			&o.MerchantName,
+		)
+
+		merchant := new(model.Merchant)
+		db.Table("merchants").Select("merchants.merchant_name").
+			Where("merchant_email = ? ", o.MerchantEmail).First(&merchant)
+		o.MerchantName = merchant.MerchantName
+
+		if err != nil {
+			log.Fatal(err)
+		}
+		result = append(result, *o)
+	}
 	db.Close()
-	return outlet
+	return result
 }

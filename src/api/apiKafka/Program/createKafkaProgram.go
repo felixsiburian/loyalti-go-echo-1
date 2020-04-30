@@ -13,6 +13,7 @@ import (
 
 func PublishCreateProgram(c echo.Context) error {
 	//var data model.Merchant
+	fmt.Println("masuk ke pblish")
 	data := new(model.Program)
 	err := json.NewDecoder(c.Request().Body).Decode(&data)
 	//err := c.Bind(data)

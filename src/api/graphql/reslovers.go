@@ -16,33 +16,38 @@ func MerchantResolver(p graphql.ResolveParams) (interface{}, error) {
 	size, sip := p.Args["size"].(int)
 	email, mail := p.Args["email"].(string)
 	sort, tap := p.Args["sort"].(int)
-	if ok && sip && tap{
+	if ok && sip && tap && mail {
+		var pages *int = &page
+		var sizes *int = &size
+		var sorts *int = &sort
+		var mails *string = &email
+		merchant := repository.GetMerchant(pages, sizes, sorts, mails)
+		fmt.Println(merchant)
+		return merchant, nil
+	} else if ok && sip && tap {
 		var pages *int = &page
 		var sizes *int = &size
 		var sorts *int = &sort
 		merchant := repository.GetMerchant(pages, sizes, sorts, nil)
 		fmt.Println(merchant)
 		return merchant, nil
-
-	} else if ok && sip && mail && tap{
-		fmt.Println("masuk kesini")
+	} else if ok && sip && mail {
 		var pages *int = &page
 		var sizes *int = &size
-		var sorts *int = &sort
-		var emails *string = &email
-		merchant := repository.GetMerchant(pages,sizes,sorts,emails)
-		fmt.Println("email ;: ",emails)
-		return merchant,nil
-	}  else if ok && sip && tap {
-		fmt.Println("eh rupanya kesini")
+		var mails *string = &email
+		merchant := repository.GetMerchant(pages, sizes, nil, mails)
+		fmt.Println(merchant)
+		return merchant, nil
+	} else if ok && sip {
 		var pages *int = &page
 		var sizes *int = &size
-		var sorts *int = &sort
-		merchant := repository.GetMerchant(pages, sizes, sorts, nil)
+		merchant := repository.GetMerchant(pages, sizes, nil, nil)
+		fmt.Println(merchant)
 		return merchant, nil
 	} else if mail {
-		var emails *string = &email
-		merchant := repository.GetMerchant(nil, nil, nil, emails)
+		var mails *string = &email
+		merchant := repository.GetMerchant(nil, nil, nil, mails)
+		fmt.Println(merchant)
 		return merchant, nil
 	}
 
@@ -52,57 +57,57 @@ func MerchantResolver(p graphql.ResolveParams) (interface{}, error) {
 }
 
 func MerchantCategoryResolver(p graphql.ResolveParams) (interface{}, error) {
-	page,ok := p.Args["page"].(int)
-	size,sip := p.Args["size"].(int)
-	sort,top := p.Args["sort"].(int)
-	if ok && sip && top{
+	page, ok := p.Args["page"].(int)
+	size, sip := p.Args["size"].(int)
+	sort, top := p.Args["sort"].(int)
+	if ok && sip && top {
 		var pages *int = &page
 		var sizes *int = &size
 		var sorts *int = &sort
 		category := repository.GetCategory(pages, sizes, sorts)
 		fmt.Println(category)
-		return category,nil
+		return category, nil
 	}
 
-	category := repository.GetCategory(nil,nil, nil)
+	category := repository.GetCategory(nil, nil, nil)
 
 	return category, nil
 }
 
 func MerchantCardTypeResolver(p graphql.ResolveParams) (interface{}, error) {
-	page,ok := p.Args["page"].(int)
+	page, ok := p.Args["page"].(int)
 	size, sip := p.Args["size"].(int)
 	sort, top := p.Args["sort"].(int)
 
-	if ok && sip && top{
+	if ok && sip && top {
 		var pages *int = &page
 		var sizes *int = &size
 		var sorts *int = &sort
-	card := repository.GetCardType(pages, sizes, sorts)
-	fmt.Println(card)
-	return card, nil
+		card := repository.GetCardType(pages, sizes, sorts)
+		fmt.Println(card)
+		return card, nil
 	}
-	card := repository.GetCardType(nil,nil, nil)
+	card := repository.GetCardType(nil, nil, nil)
 	return card, nil
 }
 
 func SocialMediaResolver(p graphql.ResolveParams) (interface{}, error) {
-	page,ok := p.Args["page"].(int)
-	size,sip := p.Args["size"].(int)
-	sort,top := p.Args["sort"].(int)
-	if ok && sip && top{
+	page, ok := p.Args["page"].(int)
+	size, sip := p.Args["size"].(int)
+	sort, top := p.Args["sort"].(int)
+	if ok && sip && top {
 		var pages *int = &page
 		var sizes *int = &size
 		var sorts *int = &sort
 		sosmed := repository.GetSocialMedia(pages, sizes, sorts)
 		fmt.Println(sosmed)
-		return sosmed,nil
+		return sosmed, nil
 	}
 	sosmed := repository.GetSocialMedia(nil, nil, nil)
 	return sosmed, nil
 }
 
-func ProvinceResolver (p graphql.ResolveParams) (interface{}, error){
+func ProvinceResolver(p graphql.ResolveParams) (interface{}, error) {
 	page, ok := p.Args["page"].(int)
 	size, sip := p.Args["size"].(int)
 	sort, top := p.Args["sort"].(int)
@@ -118,7 +123,7 @@ func ProvinceResolver (p graphql.ResolveParams) (interface{}, error){
 	return province, nil
 }
 
-func CityResolver (p graphql.ResolveParams) (interface{}, error){
+func CityResolver(p graphql.ResolveParams) (interface{}, error) {
 	page, ok := p.Args["page"].(int)
 	size, sip := p.Args["size"].(int)
 	sort, top := p.Args["sort"].(int)
@@ -135,84 +140,174 @@ func CityResolver (p graphql.ResolveParams) (interface{}, error){
 }
 
 func SpecialProgramResolver(p graphql.ResolveParams) (interface{}, error) {
-	page,ok := p.Args["page"].(int)
-	size,sip := p.Args["size"].(int)
-	sort,deh := p.Args["sort"].(int)
-	category,cat := p.Args["category"].(int)
-	detail,id := p.Args["id"].(int)
-	if ok && sip && deh && cat {
-		fmt.Println("12345")
-		var pagination *int = &page
-		var sizing *int = &size
-		var category *int = &category
-		var sorting *int = &sort
-		special := repository.GetSpecialProgram(pagination,sizing,sorting,category, nil)
-		//fmt.Println(program)
-		return special,nil
-	}else if ok && sip && deh {
-		fmt.Println("5678")
+	fmt.Println("masuk ke resolver")
+	page, ok := p.Args["page"].(int)
+	size, sip := p.Args["size"].(int)
+	sort, deh := p.Args["sort"].(int)
+	category, cat := p.Args["category"].(int)
+	email, mail := p.Args["email"].(string)
+
+	if ok && sip && deh && cat && mail {
+		fmt.Println("masuk ke 1")
 		var pages *int = &page
 		var sizes *int = &size
 		var sorts *int = &sort
-		//var cats *int = &category
-		special := repository.GetSpecialProgram(pages, sizes, sorts,nil, nil)
-		//fmt.Println(program)
-		return special,nil
+		var cats *int = &category
+		var mails *string = &email
+		program := repository.GetSpecialProgram(pages, sizes, sorts, cats, mails)
+		fmt.Println(program)
+		return program, nil
+	} else if ok && sip && deh && cat {
+		fmt.Println("masuk ke 2")
+		var pages *int = &page
+		var sizes *int = &size
+		var sorts *int = &sort
+		var cats *int = &category
+		program := repository.GetSpecialProgram(pages, sizes, sorts, cats, nil)
+		fmt.Println(program)
+		return program, nil
+	} else if ok && sip && deh && mail {
+		fmt.Println("masuk ke 3")
+		var pages *int = &page
+		var sizes *int = &size
+		var sorts *int = &sort
+		var mails *string = &email
+		program := repository.GetSpecialProgram(pages, sizes, sorts, nil, mails)
+		fmt.Println(program)
+		return program, nil
+	} else if ok && sip && deh {
+		fmt.Println("masuk ke 5")
+		var pages *int = &page
+		var sizes *int = &size
+		var sorts *int = &sort
+		program := repository.GetSpecialProgram(pages, sizes, sorts, nil, nil)
+		fmt.Println(program)
+		return program, nil
+	} else if ok && sip && cat {
+		fmt.Println("masuk ke 6")
+		var pages *int = &page
+		var sizes *int = &size
+		var cats *int = &category
+		program := repository.GetSpecialProgram(pages, sizes, nil, cats, nil)
+		fmt.Println(program)
+		return program, nil
+	} else if ok && sip && mail {
+		fmt.Println("masuk ke 7")
+		var pages *int = &page
+		var sizes *int = &size
+		var mails *string = &email
+		program := repository.GetSpecialProgram(pages, sizes, nil, nil, mails)
+		fmt.Println(program)
+		return program, nil
 	} else if ok && sip {
-		fmt.Println("7890")
-		var paging *int = &page
-		var sizing *int = &size
-		special := repository.GetSpecialProgram(paging, sizing, nil, nil, nil)
-		//fmt.Println(program)
-		return special,nil
-	} else if id {
-		var detail *int = &detail
-		special := repository.GetSpecialProgram(nil, nil,nil,nil, detail)
-		return special, nil
+		fmt.Println("masuk ke 8 ")
+		var pages *int = &page
+		var sizes *int = &size
+		program := repository.GetSpecialProgram(pages, sizes, nil, nil, nil)
+		fmt.Println(program)
+		return program, nil
+	} else if cat {
+		fmt.Println("masuk ke 9")
+		var cats *int = &category
+		program := repository.GetSpecialProgram(nil, nil, nil, cats, nil)
+		fmt.Println(program)
+		return program, nil
+	} else if mail {
+		fmt.Println("masuk ke 10")
+		var mails *string = &email
+		program := repository.GetSpecialProgram(nil, nil, nil, nil, mails)
+		fmt.Println(program)
+		return program, nil
 	}
 
-	special := repository.GetSpecialProgram(nil,nil, nil, nil, nil)
+	program := repository.GetSpecialProgram(nil, nil, nil, nil, nil)
 
-	return special, nil
+	return program, nil
 }
 
 //program function
 func ProgramResolver(p graphql.ResolveParams) (interface{}, error) {
 	fmt.Println("masuk ke resolver")
-	page,ok := p.Args["page"].(int)
-	size,sip := p.Args["size"].(int)
-	sort,deh := p.Args["sort"].(int)
+	page, ok := p.Args["page"].(int)
+	size, sip := p.Args["size"].(int)
+	sort, deh := p.Args["sort"].(int)
 	category, cat := p.Args["category"].(int)
-	detail, id := p.Args["id"].(int)
-	if ok && sip && deh && cat {
-		var pagination *int = &page
-		var sizing *int = &size
-		var category *int = &category
-		var sorting *int = &sort
-		program := repository.GetProgram(pagination,sizing,sorting,category,nil)
-		//fmt.Println(program)
-		return program,nil
-	}else if ok && sip && deh {
+	email, mail := p.Args["email"].(string)
+
+	if ok && sip && deh && cat && mail {
+		fmt.Println("masuk ke 1")
 		var pages *int = &page
 		var sizes *int = &size
 		var sorts *int = &sort
-		//var cats *int = &category
-		program := repository.GetProgram(pages, sizes, sorts,nil,nil)
-		//fmt.Println(program)
-		return program,nil
+		var cats *int = &category
+		var mails *string = &email
+		program := repository.GetProgram(pages, sizes, sorts, cats, mails)
+		fmt.Println(program)
+		return program, nil
+	} else if ok && sip && deh && cat {
+		fmt.Println("masuk ke 2")
+		var pages *int = &page
+		var sizes *int = &size
+		var sorts *int = &sort
+		var cats *int = &category
+		program := repository.GetProgram(pages, sizes, sorts, cats, nil)
+		fmt.Println(program)
+		return program, nil
+	} else if ok && sip && deh && mail {
+		fmt.Println("masuk ke 3")
+		var pages *int = &page
+		var sizes *int = &size
+		var sorts *int = &sort
+		var mails *string = &email
+		program := repository.GetProgram(pages, sizes, sorts, nil, mails)
+		fmt.Println(program)
+		return program, nil
+	} else if ok && sip && deh {
+		fmt.Println("masuk ke 5")
+		var pages *int = &page
+		var sizes *int = &size
+		var sorts *int = &sort
+		program := repository.GetProgram(pages, sizes, sorts, nil, nil)
+		fmt.Println(program)
+		return program, nil
+	} else if ok && sip && cat {
+		fmt.Println("masuk ke 6")
+		var pages *int = &page
+		var sizes *int = &size
+		var cats *int = &category
+		program := repository.GetProgram(pages, sizes, nil, cats, nil)
+		fmt.Println(program)
+		return program, nil
+	} else if ok && sip && mail {
+		fmt.Println("masuk ke 7")
+		var pages *int = &page
+		var sizes *int = &size
+		var mails *string = &email
+		program := repository.GetProgram(pages, sizes, nil, nil, mails)
+		fmt.Println(program)
+		return program, nil
 	} else if ok && sip {
-		var paging *int = &page
-		var sizing *int = &size
-		program := repository.GetProgram(paging, sizing, nil, nil,nil)
-		//fmt.Println(program)
-		return program,nil
-	} else if id {
-		var detail *int = &detail
-		program := repository.GetProgram(nil,nil,nil,nil, detail)
-		return program,nil
+		fmt.Println("masuk ke 8 ")
+		var pages *int = &page
+		var sizes *int = &size
+		program := repository.GetProgram(pages, sizes, nil, nil, nil)
+		fmt.Println(program)
+		return program, nil
+	} else if cat {
+		fmt.Println("masuk ke 9")
+		var cats *int = &category
+		program := repository.GetProgram(nil, nil, nil, cats, nil)
+		fmt.Println(program)
+		return program, nil
+	} else if mail {
+		fmt.Println("masuk ke 10")
+		var mails *string = &email
+		program := repository.GetProgram(nil, nil, nil, nil, mails)
+		fmt.Println(program)
+		return program, nil
 	}
 
-	program := repository.GetProgram(nil,nil, nil, nil,nil)
+	program := repository.GetProgram(nil, nil, nil, nil, nil)
 
 	return program, nil
 }
@@ -223,54 +318,59 @@ func OutletResolver(p graphql.ResolveParams) (interface{}, error) {
 	size, sip := p.Args["size"].(int)
 	id, top := p.Args["id"].(int)
 	email, mail := p.Args["email"].(string)
-	if ok && sip && top && mail{
+	if ok && sip && top && mail {
 		var pages *int = &page
 		var sizes *int = &size
-		var merchant_id *int = &id
+		var outlet_id *int = &id
 		var emails *string = &email
-		outlet := repository.GetOutlet(pages, sizes, merchant_id, emails)
+		outlet := repository.GetOutlet(pages, sizes, outlet_id, emails)
 		fmt.Println(outlet)
-		return outlet,nil
+		return outlet, nil
 	} else if ok && sip && mail {
 		var paging *int = &page
 		var sizing *int = &size
 		var emails *string = &email
 		outlet := repository.GetOutlet(paging, sizing, nil, emails)
 		return outlet, nil
-	} else if ok && sip && top{
+	} else if ok && sip && top {
 		var paging *int = &page
 		var sizing *int = &size
 		var merchant *int = &id
 		outlet := repository.GetOutlet(paging, sizing, merchant, nil)
-		return outlet,nil
-	} else if ok && sip{
+		return outlet, nil
+	} else if ok && sip {
 		var paging *int = &page
 		var sizing *int = &size
 		outlet := repository.GetOutlet(paging, sizing, nil, nil)
-		return outlet,nil
+		return outlet, nil
+	} else if mail {
+		var emails *string = &email
+		outlet := repository.GetOutlet(nil, nil, nil, emails)
+		fmt.Println(outlet)
+		return outlet, nil
 	}
-	outlet := repository.GetOutlet(nil,nil, nil, nil)
+	outlet := repository.GetOutlet(nil, nil, nil, nil)
 	return outlet, nil
 }
 
 func EmployeeResolver(p graphql.ResolveParams) (interface{}, error) {
-	page,ok := p.Args["page"].(int)
-	size,sip := p.Args["size"].(int)
+	page, ok := p.Args["page"].(int)
+	size, sip := p.Args["size"].(int)
 	sort, top := p.Args["id"].(int)
-	if ok && sip && top{
+	if ok && sip && top {
 		var pages *int = &page
 		var sizes *int = &size
 		var sorts *int = &sort
 		employee := repository.GetEmployee(pages, sizes, sorts)
 		fmt.Println(employee)
-		return employee,nil
-	} else if ok && sip{
+		return employee, nil
+	} else if ok && sip {
 		var paging *int = &page
 		var sizing *int = &size
 		employee := repository.GetEmployee(paging, sizing, nil)
-		return employee,nil
+		return employee, nil
 	}
-	employee := repository.GetEmployee(nil,nil, nil)
+	employee := repository.GetEmployee(nil, nil, nil)
 	return employee, nil
 }
 
@@ -278,12 +378,12 @@ func TotalPointResolver(p graphql.ResolveParams)(interface{}, error){
 	id := p.Args["id"].(int)
 	pay := p.Args["pay"].(int)
 	pin := p.Args["pin"].(string)
-	outletid := p.Args["outletid"].(string)
+	outletid := p.Args["outletid"].(int)
 	cardtype := p.Args["cardtype"].(string)
 	var ids int = id
 	var pays int = pay
 	var pins string = pin
-	var outletids string = outletid
+	var outletids int = outletid
 	var cardtypes string = cardtype
 	total := repository.TotalPoint(ids, pays, pins, outletids, cardtypes)
 	return total, nil
@@ -293,12 +393,12 @@ func TotalChopResolver(p graphql.ResolveParams)(interface{}, error){
 	id := p.Args["id"].(int)
 	pay := p.Args["pay"].(int)
 	pin := p.Args["pin"].(string)
-	outletid := p.Args["outletid"].(string)
+	outletid := p.Args["outletid"].(int)
 	cardtype := p.Args["cardtype"].(string)
 	var ids int = id
 	var pays int = pay
 	var pins string = pin
-	var outletids string = outletid
+	var outletids int = outletid
 	var cardtypes string = cardtype
 	total := repository.TotalChop(ids, pays, pins, outletids, cardtypes)
 	return total, nil
@@ -313,17 +413,36 @@ func TotalChopResolver(p graphql.ResolveParams)(interface{}, error){
 //	return card, nil
 //}
 
-func TransactionResolver (p graphql.ResolveParams)(interface{}, error){
+func TransactionResolver(p graphql.ResolveParams) (interface{}, error) {
 	page, ok := p.Args["page"].(int)
 	size, sip := p.Args["size"].(int)
 	sort, top := p.Args["sort"].(int)
-	outletid, tap := p.Args["outletid"].(string)
+	outletid, tap := p.Args["outletid"].(int)
 	if ok && sip && top && tap{
 		var pages *int = &page
 		var sizes *int = &size
 		var sorts *int = &sort
-		var outletids *string = &outletid
+		var outletids *int = &outletid
 		transaction := repository.GetTransaction(pages, sizes, sorts, outletids)
+		fmt.Println(transaction)
+		return transaction, nil
+	}else if ok && sip && top {
+		var pages *int = &page
+		var sizes *int = &size
+		var sorts *int = &sort
+		transaction := repository.GetTransaction(pages, sizes, sorts, nil)
+		fmt.Println(transaction)
+		return transaction, nil
+	}else if ok && sip && tap {
+		var pages *int = &page
+		var sizes *int = &size
+		var outletids *int = &outletid
+		transaction := repository.GetTransaction(pages, sizes, nil, outletids)
+		fmt.Println(transaction)
+		return transaction, nil
+	}else if tap{
+		var outletids *int = &outletid
+		transaction := repository.GetTransaction(nil, nil, nil, outletids)
 		fmt.Println(transaction)
 		return transaction, nil
 	}
@@ -356,82 +475,96 @@ func SongResolver(p graphql.ResolveParams) (interface{}, error) {
 
 func CardResolver(p graphql.ResolveParams) (interface{}, error) {
 	fmt.Println("masuk ke resolver card")
-	page,ok := p.Args["page"].(int)
-	size,sip := p.Args["size"].(int)
+	page, ok := p.Args["page"].(int)
+	size, sip := p.Args["size"].(int)
 	id, top := p.Args["id"].(int)
 	card_type, tipe := p.Args["card_type"].(string)
 
-	var outlet []model.Card
+	var outlet []model.ProgramCard
 
 	fmt.Println("keluar dari if member")
 
-	if ok && sip && top && tipe{
+	if ok && sip && top && tipe {
 		fmt.Println("masuk ke if pertama")
 		var pages *int = &page
 		var sizes *int = &size
 		var top *int = &id
 		var types *string = &card_type
-		if (card_type == "Member"){
+		if (card_type == "Member") {
 			fmt.Println("masuk ke if member")
-			outlet =  repository.GetCardMember(id)
+			outlet = repository.GetCardMember(id)
 		}
 		outlet := repository.GetCardMerchant(pages, sizes, top, types)
 		return outlet, nil
-	} else if ok && sip && top{
+	} else if ok && sip && top {
 		fmt.Println("masuk ke if kedua")
 		var pages *int = &page
 		var sizes *int = &size
 		var card_id *int = &id
-		outlet := repository.GetCardMerchant(pages, sizes, card_id,nil)
+		outlet := repository.GetCardMerchant(pages, sizes, card_id, nil)
 
 		fmt.Println(outlet)
-		return outlet,nil
-	} else if ok && sip{
+		return outlet, nil
+	} else if ok && sip {
 		fmt.Println("masuk ke if ketiga")
 		var paging *int = &page
 		var sizing *int = &size
 		outlet := repository.GetCardMerchant(paging, sizing, nil, nil)
-		return outlet,nil
+		return outlet, nil
 	} else if ok && sip && top {
 		fmt.Println("masuk ke if keempat")
 		var paging *int = &page
 		var sizing *int = &size
 		var program_id *int = &id
 		outlet := repository.GetCardMerchant(paging, sizing, program_id, nil)
-		return outlet,nil
+		return outlet, nil
 	}
 	fmt.Println("lewat semua")
-	outlet = repository.GetCardMerchant(nil,nil, nil, nil)
+	outlet = repository.GetCardMerchant(nil, nil, nil, nil)
 	fmt.Println(outlet)
 	return outlet, nil
 }
 
-func VoucherResolver (p graphql.ResolveParams) (interface{}, error) {
+func VoucherResolver(p graphql.ResolveParams) (interface{}, error) {
 	page, ok := p.Args["page"].(int)
 	size, sip := p.Args["size"].(int)
 	sort, top := p.Args["sort"].(int)
-	merchant_id, tap := p.Args["merchant_id"].(int)
-	if ok && sip && top && tap{
+	merchant_id, tap := p.Args["merchant_email"].(string)
+	if ok && sip && top && tap {
 		var pages *int = &page
 		var sizes *int = &size
 		var sorts *int = &sort
-		var merchant_ids *int = &merchant_id
+		var merchant_ids *string = &merchant_id
 		voucher := repository.GetVoucher(pages, sizes, sorts, merchant_ids)
 		fmt.Println(voucher)
 		return voucher, nil
 	}
-	if ok && sip{
+	if ok && sip && tap {
+		var pages *int = &page
+		var sizes *int = &size
+		var merchant_ids *string = &merchant_id
+		voucher := repository.GetVoucher(pages, sizes, nil, merchant_ids)
+		fmt.Println(voucher)
+		return voucher, nil
+	}
+	if ok && sip {
 		var pages *int = &page
 		var sizes *int = &size
 		voucher := repository.GetVoucher(pages, sizes, nil, nil)
 		fmt.Println(voucher)
 		return voucher, nil
 	}
-	if ok && sip && top && tap{
+	if ok && sip && top {
 		var pages *int = &page
 		var sizes *int = &size
 		var sorts *int = &sort
 		voucher := repository.GetVoucher(pages, sizes, sorts, nil)
+		fmt.Println(voucher)
+		return voucher, nil
+	}
+	if tap {
+		var merchant_ids *string = &merchant_id
+		voucher := repository.GetVoucher(nil, nil, nil, merchant_ids)
 		fmt.Println(voucher)
 		return voucher, nil
 	}
@@ -440,13 +573,13 @@ func VoucherResolver (p graphql.ResolveParams) (interface{}, error) {
 	return voucher, nil
 }
 
-func RewardResolver (p graphql.ResolveParams) (interface{}, error) {
+func RewardResolver(p graphql.ResolveParams) (interface{}, error) {
 	fmt.Println("masuk ke resolver")
 	page, ok := p.Args["page"].(int)
 	size, sip := p.Args["size"].(int)
 	sort, top := p.Args["sort"].(int)
 	merchant_email, tap := p.Args["merchant_email"].(string)
-	if ok && sip && top && tap{
+	if ok && sip && top && tap {
 		fmt.Println("masuk if 1")
 		var pages *int = &page
 		var sizes *int = &size
@@ -456,7 +589,7 @@ func RewardResolver (p graphql.ResolveParams) (interface{}, error) {
 		fmt.Println(voucher)
 		return voucher, nil
 	}
-	if tap{
+	if tap {
 		fmt.Println("masuk if 2")
 		var merchant_emails *string = &merchant_email
 		voucher := repository.GetReward(nil, nil, nil, merchant_emails)

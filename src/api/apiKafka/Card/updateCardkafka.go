@@ -13,7 +13,7 @@ import (
 
 func PublishUpdateCard(c echo.Context) error {
 	//var data model.Merchant
-	data := new(model.Card)
+	data := new(model.ProgramCard)
 	err := json.NewDecoder(c.Request().Body).Decode(&data)
 	//err := c.Bind(data)
 	if err != nil {
@@ -47,7 +47,7 @@ func PublishUpdateCard(c echo.Context) error {
 		}
 	}()
 
-	var newTopic = "delete-card-topic"
+	var newTopic = "update-card-topic"
 
 	message, _ := json.Marshal(data)
 	//message := `{

@@ -13,7 +13,7 @@ import (
 
 func PublishUpdateOutlet(c echo.Context) error {
 	//var data model.Merchant
-	data := new(model.Outlet)
+	data := new(model.Outlet2)
 	err := json.NewDecoder(c.Request().Body).Decode(&data)
 	//err := c.Bind(data)WWW
 	if err != nil {

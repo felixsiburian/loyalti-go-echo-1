@@ -13,7 +13,7 @@ import (
 
 func PublishDeleteCard(c echo.Context) error {
 	//var data model.Merchant
-	data := new(model.Card)
+	data := new(model.ProgramCard)
 	err := json.NewDecoder(c.Request().Body).Decode(&data)
 	//err := c.Bind(data)
 	if err != nil {

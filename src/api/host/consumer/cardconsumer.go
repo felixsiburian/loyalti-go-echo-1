@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/Shopify/sarama"
+	"github.com/labstack/gommon/log"
 	"github.com/radyatamaa/loyalti-go-echo/src/api/host/Config"
 	"github.com/radyatamaa/loyalti-go-echo/src/domain/model"
 	"github.com/radyatamaa/loyalti-go-echo/src/domain/repository"
@@ -40,7 +41,7 @@ func consumeCard(topics []string, master sarama.Consumer) (chan *sarama.Consumer
 				case msg := <-consumer.Messages():
 					//*messageCountStart++
 					//Deserialize
-					card := model.Card{}
+					card := model.ProgramCard{}
 					switch msg.Topic {
 					case "create-card-topic":
 						err := json.Unmarshal([]byte(msg.Value), &card)
@@ -51,22 +52,28 @@ func consumeCard(topics []string, master sarama.Consumer) (chan *sarama.Consumer
 						repository.CreateCardMerchant(&card)
 						fmt.Println(string(msg.Value))
 						fmt.Println("Card berhasil dibuat")
-					//case "update-card-topic":
-					//	err := json.Unmarshal([]byte(msg.Value), &card)
-					//	if err != nil {
-					//		fmt.Println(err.Error())
-					//		os.Exit(1)
-					//	}
-					//	repository.UpdateCard(&card)
-					//	fmt.Println("card berhasil diupdate")
-					//case "delete-card-topic":
-					//	err := json.Unmarshal([]byte(msg.Value), &card)
-					//	if err != nil {
-					//		fmt.Println(err.Error())
-					//		os.Exit(1)
-					//	}
-					//	repository.DeleteCard(&card)
-					//	fmt.Println("card berhasil dihapus")
+					case "update-card-topic":
+						err := json.Unmarshal([]byte(msg.Value), &card)
+						if err != nil {
+							fmt.Println(err.Error())
+							os.Exit(1)
+						}
+						err = repository.UpdateCardMerchant(&card)
+						if err != nil {
+							log.Fatal(err)
+						}
+						fmt.Println("card berhasil diupdate")
+					case "delete-card-topic":
+						err := json.Unmarshal([]byte(msg.Value), &card)
+						if err != nil {
+							fmt.Println(err.Error())
+							os.Exit(1)
+						}
+						err = repository.DeleteCardMerchant(&card)
+						if err != nil {
+							log.Fatal(err)
+						}
+						fmt.Println("card berhasil dihapus")
 					}
 				}
 			}

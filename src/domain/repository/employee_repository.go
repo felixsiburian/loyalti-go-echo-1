@@ -1,29 +1,28 @@
 package repository
 
 import (
+	"database/sql"
 	"fmt"
-	"github.com/beevik/guid"
-	"github.com/biezhi/gorm-paginator/pagination"
 	"github.com/jinzhu/gorm"
+	"github.com/labstack/gommon/log"
 	"github.com/radyatamaa/loyalti-go-echo/src/database"
 	"github.com/radyatamaa/loyalti-go-echo/src/domain/model"
 	"time"
 )
 
 type EmployeeRepository interface {
-	CreateEmployee (newemployee *model.Employee) error
-	UpdateEmployee (newemployee *model.Employee) error
-	DeleteEmployee (newemployee *model.Employee) error
+	CreateEmployee(newemployee *model.Employee) error
+	UpdateEmployee(newemployee *model.Employee) error
+	DeleteEmployee(newemployee *model.Employee) error
 }
 
 type employee_repo struct {
 	DB *gorm.DB
 }
 
-func (p employee_repo) CreateEmployee (newemployee *model.Employee) error {
+func (p employee_repo) CreateEmployee(newemployee *model.Employee) error {
 	fmt.Println("masuk fungsi")
 	employee := model.Employee{
-		Id:            guid.NewString(),
 		Created:       time.Now(),
 		CreatedBy:     "",
 		Modified:      time.Now(),
@@ -48,16 +47,15 @@ func (p employee_repo) CreateEmployee (newemployee *model.Employee) error {
 	return err
 }
 
-func CreateEmployeeRepository (db *gorm.DB) EmployeeRepository {
+func CreateEmployeeRepository(db *gorm.DB) EmployeeRepository {
 	return &employee_repo{
-		DB:db,
+		DB: db,
 	}
 }
 
-func (p *employee_repo) UpdateEmployee(updateemployee *model.Employee) error{
+func (p *employee_repo) UpdateEmployee(updateemployee *model.Employee) error {
 	db := database.ConnectionDB()
 	employee := model.Employee{
-		Id:            guid.NewString(),
 		Created:       time.Now(),
 		CreatedBy:     "",
 		Modified:      time.Now(),
@@ -87,14 +85,28 @@ func (p *employee_repo) DeleteEmployee(deleteemployee *model.Employee) error {
 	return err
 }
 
-func CreateEmployee(employee *model.Employee) string{
+func CreateEmployee(employee *model.Employee) string {
 	db := database.ConnectionDB()
-	employee.Id = guid.NewString()
-	db.Create(&employee)
+	emp := model.Employee{
+		Created:       time.Now(),
+		CreatedBy:     "Admin",
+		Modified:      time.Time{},
+		ModifiedBy:    "Admin",
+		Active:        true,
+		IsDeleted:     false,
+		Deleted:       nil,
+		Deleted_by:    "",
+		EmployeeName:  employee.EmployeeName,
+		EmployeeEmail: employee.EmployeeEmail,
+		EmployeePin:   employee.EmployeePin,
+		EmployeeRole:  employee.EmployeeRole,
+		OutletId:      employee.OutletId,
+		OutletName:    "a",
+	}
+	db.Create(&emp)
 	defer db.Close()
 	return employee.EmployeeEmail
 }
-
 
 func UpdateEmployee(employee *model.Employee) string {
 	db := database.ConnectionDB()
@@ -103,10 +115,11 @@ func UpdateEmployee(employee *model.Employee) string {
 	return employee.EmployeeEmail
 }
 
-
 func DeleteEmployee(employee *model.Employee) string {
 	db := database.ConnectionDB()
-	db.Model(&employee).Where("outlet_id = ?", employee.OutletId).Delete(&employee)
+	db.Model(&employee).Where("employee_email = ?", employee.EmployeeEmail).Update("active", false)
+	db.Model(&employee).Where("employee_email = ?", employee.EmployeeEmail).Update("is_deleted", true)
+
 	//db.Model(&employee).Where("employee_email = ?",employee.EmployeeEmail).Update("active", false)
 	defer db.Close()
 	return "berhasil dihapus"
@@ -114,48 +127,79 @@ func DeleteEmployee(employee *model.Employee) string {
 
 func GetEmployee(page *int, size *int, sort *int) []model.Employee {
 	db := database.ConnectionDB()
-	//db := database.ConnectPostgre()
 	var employee []model.Employee
-	db.Find(&employee)
+	var rows *sql.Rows
+	var err error
+	var total int
 
-	if  page == nil && size == nil && sort == nil {
-		db.Model(&employee).Find(&employee)
-	}
-
-	if page != nil && size != nil && sort == nil {
-		fmt.Println("masuk 2")
-		db.Model(&employee).Find(&employee)
-		pagination.Paging(&pagination.Param{
-			DB:      db,
-			Page:    *page,
-			Limit:   *size,
-			OrderBy: []string{"employee_name asc"},
-		}, &employee)
-	}
-
-	if page != nil && size != nil && sort != nil {
-		switch *sort {
-		case 1 :
-			fmt.Println("masuk 3")
-			db.Model(&employee).Find(&employee)
-			pagination.Paging(&pagination.Param{
-				DB:      db,
-				Page:    *page,
-				Limit:   *size,
-				OrderBy: []string{"employee_name asc"},
-			}, &employee)
-		case 2:
-			fmt.Println("masuk 4")
-			db.Model(&employee).Find(&employee)
-			pagination.Paging(&pagination.Param{
-				DB:      db,
-				Page:    *page,
-				Limit:   *size,
-				OrderBy: []string{"employee_name desc"},
-			}, &employee)
+	if page == nil && size == nil && sort == nil {
+		rows, err = db.Find(&employee).Rows()
+		if err != nil {
+			log.Fatal(err)
 		}
 	}
 
+	if page != nil && size != nil {
+		fmt.Println("masuk kesini")
+		rows, err = db.Order("employee_name asc").Find(&employee).Count(total).Limit(*size).Offset(*page).Rows()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	if page != nil && size != nil && sort != nil {
+		fmt.Println("masuk sort")
+		switch *sort {
+		case 1:
+			rows, err = db.Find(&employee).Order("employee_name asc").Count(total).Limit(*size).Offset(*page).Rows()
+			if err != nil {
+				log.Fatal(err)
+			}
+		case 2:
+			rows, err = db.Find(&employee).Order("employee_name desc").Count(total).Limit(*size).Offset(*page).Rows()
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
+	}
+
+	result := make([]model.Employee, 0)
+
+	for rows.Next() {
+		e := &model.Employee{}
+		fmt.Println(e)
+
+		err = rows.Scan(
+			&e.Id,
+			&e.Created,
+			&e.CreatedBy,
+			&e.Modified,
+			&e.ModifiedBy,
+			&e.Active,
+			&e.IsDeleted,
+			&e.Deleted,
+			&e.Deleted_by,
+			&e.EmployeeName,
+			&e.EmployeeEmail,
+			&e.EmployeePin,
+			&e.EmployeeRole,
+			&e.OutletId,
+			&e.OutletName,
+		)
+
+		outlet := new(model.Outlet2)
+		db.Table("outlet2").
+			Select("outlet2.outlet_name").
+			Where("id = ? ", e.OutletId).
+			First(&outlet)
+		e.OutletName = outlet.OutletName
+
+		if err != nil {
+			log.Fatal(err)
+		}
+		result = append(result, *e)
+	}
+
 	db.Close()
-	return employee
+	return result
 }

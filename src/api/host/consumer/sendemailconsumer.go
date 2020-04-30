@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/Shopify/sarama"
-	"github.com/radyatamaa/loyalti-go-echo/src/api/SendMail"
+	"github.com/radyatamaa/loyalti-go-echo/src/api/SendGrid"
 	"github.com/radyatamaa/loyalti-go-echo/src/api/host/Config"
 	"github.com/radyatamaa/loyalti-go-echo/src/domain/model"
 	"os"
@@ -39,9 +39,9 @@ func consumeSendemail(topics []string, master sarama.Consumer) (chan *sarama.Con
 				case msg := <-consumer.Messages():
 					//*messageCountStart++
 					//Deserialize
-					email := model.Emails{}
-					pin := model.Emails{}
-					forgetpass := model.Emails{}
+					email := model.Email{}
+					pin := model.EmailEmployee{}
+					forgetpass := model.EmailForgetPass{}
 					switch msg.Topic {
 					case "send-email-topic":
 						fmt.Println("Topic send-email didapatkan")
@@ -50,7 +50,7 @@ func consumeSendemail(topics []string, master sarama.Consumer) (chan *sarama.Con
 							fmt.Println(err.Error())
 							os.Exit(1)
 						}
-						err = SendMail.SendMails(&email)
+						err = SendGrid.SendMail(&email)
 						if err != nil{
 							fmt.Println("Error : ", err.Error())
 							os.Exit(1)
@@ -67,7 +67,7 @@ func consumeSendemail(topics []string, master sarama.Consumer) (chan *sarama.Con
 						}
 						fmt.Println("Isi msg")
 						fmt.Println(string([]byte(msg.Value)))
-						err = SendMail.SendPins(&pin)
+						err = SendGrid.SendPin(&pin)
 						if err != nil{
 							fmt.Println("Error : ", err.Error())
 							os.Exit(1)
@@ -84,7 +84,7 @@ func consumeSendemail(topics []string, master sarama.Consumer) (chan *sarama.Con
 						}
 						fmt.Println("Isi msg")
 						fmt.Println(string([]byte(msg.Value)))
-						err = SendMail.SendForget(&forgetpass)
+						err = SendGrid.SendForgetPass(&forgetpass)
 						if err != nil{
 							fmt.Println("Error : ", err.Error())
 							os.Exit(1)

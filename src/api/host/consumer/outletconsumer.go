@@ -40,7 +40,7 @@ func consumeOutlet(topics []string, master sarama.Consumer) (chan *sarama.Consum
 				case msg := <-consumer.Messages():
 					//*messageCountStart++
 					//Deserialize
-					outlet := model.Outlet{}
+					outlet := model.Outlet2{}
 					switch msg.Topic {
 					case "create-outlet-topic":
 						err := json.Unmarshal([]byte(msg.Value), &outlet)
