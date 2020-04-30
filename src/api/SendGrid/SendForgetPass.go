@@ -24,7 +24,7 @@ func SendForgetPass(email *model.EmailForgetPass) error {
 	//var e Email
 	//var a = fmt.Sprintf("%s", viper.Get("SENDGRIDKEY"))
 	//fmt.Println(a)
-	var a = "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"
+	var a = "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"
 	from := mail.NewEmail(e.SenderName, e.SenderEmail)
 	subject := e.Subject
 		fmt.Println("masuk ke perulangan")

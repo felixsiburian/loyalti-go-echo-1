@@ -16,7 +16,7 @@ func SendMail(email *model.Email) error {
 	fmt.Println("email : ", email)
 	fmt.Println("e : ", e)
 
-	var a = "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"
+	var a = "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"
 	from := mail.NewEmail(e.SenderName, e.SenderEmail)
 	subject := e.Subject
 	for i := range e.Receiver {
