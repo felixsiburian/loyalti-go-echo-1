@@ -109,7 +109,7 @@ func CreateOutlet(outlet *model.Outlet2) string {
 		ModifiedBy:       "Admin",
 		Active:           true,
 		IsDeleted:        false,
-		Deleted:          time.Time{},
+		Deleted:          time.Now(),
 		Deleted_by:       "",
 		OutletName:       outlet.OutletName,
 		OutletAddress:    outlet.OutletAddress,

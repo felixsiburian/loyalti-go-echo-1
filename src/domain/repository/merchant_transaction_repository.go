@@ -43,7 +43,7 @@ func CreateTransaction(transaction *model.TransactionMerchant) string {
 		ModifiedBy:       "Admin",
 		Active:           true,
 		IsDeleted:        false,
-		Deleted:          time.Time{},
+		Deleted:          time.Now(),
 		Deleted_by:       "",
 		MerchantEmail:    transaction.MerchantEmail,
 		OutletId:         transaction.OutletId,

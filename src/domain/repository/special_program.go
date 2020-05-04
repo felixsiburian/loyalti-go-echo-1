@@ -85,7 +85,7 @@ func CreateSpecial(special *model.SpecialProgram) string {
 		ModifiedBy:            "Admin",
 		Active:                true,
 		IsDeleted:             false,
-		Deleted:               time.Time{},
+		Deleted:               time.Now(),
 		Deleted_by:            "",
 		ProgramName:           special.ProgramName,
 		ProgramImage:          special.ProgramImage,

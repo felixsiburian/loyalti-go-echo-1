@@ -17,7 +17,7 @@ func CreateReward(reward *model.Reward) string {
 		ModifiedBy:        "Admin",
 		Active:            true,
 		IsDeleted:         false,
-		Deleted:           time.Time{},
+		Deleted:           time.Now(),
 		DeletedBy:         "",
 		RedeemPoints:      reward.RedeemPoints,
 		RewardName:        reward.RewardName,

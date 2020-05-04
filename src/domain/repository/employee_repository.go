@@ -90,11 +90,11 @@ func CreateEmployee(employee *model.Employee) string {
 	emp := model.Employee{
 		Created:       time.Now(),
 		CreatedBy:     "Admin",
-		Modified:      time.Time{},
+		Modified:      time.Now(),
 		ModifiedBy:    "Admin",
 		Active:        true,
 		IsDeleted:     false,
-		Deleted:       time.Time{},
+		Deleted:       time.Now(),
 		Deleted_by:    "",
 		EmployeeName:  employee.EmployeeName,
 		EmployeeEmail: employee.EmployeeEmail,
@@ -118,9 +118,9 @@ func UpdateEmployee(employee *model.Employee) string {
 
 func DeleteEmployee(employee *model.Employee) string {
 	db := database.ConnectionDB()
+	employee.Deleted = time.Now()
 	db.Model(&employee).Where("employee_email = ?", employee.EmployeeEmail).Update("active", false)
 	db.Model(&employee).Where("employee_email = ?", employee.EmployeeEmail).Update("is_deleted", true)
-	employee.Deleted = time.Now()
 
 	//db.Model(&employee).Where("employee_email = ?",employee.EmployeeEmail).Update("active", false)
 	defer db.Close()

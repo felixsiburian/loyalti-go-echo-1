@@ -18,7 +18,7 @@ func CreateVoucher(voucher *model.Voucher) string {
 		ModifiedBy:               "Admin",
 		Active:                   true,
 		IsDeleted:                false,
-		Deleted:                  time.Time{},
+		Deleted:                  time.Now(),
 		DeletedBy:                "",
 		VoucherName:              voucher.VoucherName,
 		StartDate:                voucher.StartDate,

@@ -74,7 +74,7 @@ func CreateProgram(program *model.Program) string {
 		ModifiedBy:            "Admin",
 		Active:                true,
 		IsDeleted:             false,
-		Deleted:               time.Time{},
+		Deleted:               time.Now(),
 		Deleted_by:            "",
 		ProgramName:           program.ProgramName,
 		ProgramImage:          program.ProgramImage,

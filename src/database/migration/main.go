@@ -2,10 +2,16 @@ package main
 
 import (
 	_ "github.com/jinzhu/gorm/dialects/mssql"
+	"github.com/radyatamaa/loyalti-go-echo/src/database"
+	"github.com/radyatamaa/loyalti-go-echo/src/domain/model"
 )
 
 func main() {
-	//db := database.ConnectionDB()
+	db := database.ConnectionDB()
+	//db.AutoMigrate(&model.Outlet2{}, &model.Program{}, &model.SpecialProgram{},
+	//&model.Voucher{}, &model.CardType{}, &model.Employee{}, &model.MerchantCategory{},
+	//&model.MerchantSocialMedia{}, &model.Merchant{}, &model.ProgramCard{}, &model.Reward{}, &model.TransactionMerchant{})
+	db.AutoMigrate(&model.Outlet2{})
 	//	var gallery []model.Gallery
 	//	db.AutoMigrate(&model.Gallery{})
 	//	galleries := model.Gallery{
