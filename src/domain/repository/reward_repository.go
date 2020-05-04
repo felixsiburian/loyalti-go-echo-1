@@ -17,7 +17,7 @@ func CreateReward(reward *model.Reward) string {
 		ModifiedBy:        "Admin",
 		Active:            true,
 		IsDeleted:         false,
-		Deleted:           nil,
+		Deleted:           time.Time{},
 		DeletedBy:         "",
 		RedeemPoints:      reward.RedeemPoints,
 		RewardName:        reward.RewardName,
@@ -46,6 +46,7 @@ func UpdateReward(reward *model.Reward) string {
 		"merchant_email":      reward.MerchantEmail,
 		"outletid":            reward.Outletid,
 	})
+	reward.Modified = time.Now()
 	defer db.Close()
 	return "Update Berhasil"
 }
@@ -54,7 +55,7 @@ func DeleteReward(reward *model.Reward) string {
 	db := database.ConnectionDB()
 	db.Model(&reward).Where("id = ?", reward.Id).Update("active", false)
 	db.Model(&reward).Where("id = ?", reward.Id).Update("is_deleted", true)
-
+	reward.Deleted = time.Now()
 	defer db.Close()
 	return "Berhasil dihapus"
 }

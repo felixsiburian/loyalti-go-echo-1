@@ -43,7 +43,7 @@ func CreateTransaction(transaction *model.TransactionMerchant) string {
 		ModifiedBy:       "Admin",
 		Active:           true,
 		IsDeleted:        false,
-		Deleted:          nil,
+		Deleted:          time.Time{},
 		Deleted_by:       "",
 		MerchantEmail:    transaction.MerchantEmail,
 		OutletId:         transaction.OutletId,
@@ -66,6 +66,7 @@ func UpdateTransaction(transaction *model.TransactionMerchant) string {
 		"total_transaction": transaction.TotalTransaction,
 		"point_transaction": transaction.PointTransaction,
 	})
+	transaction.Modified = time.Now()
 	defer db.Close()
 	return transaction.BillNumber
 }
@@ -74,6 +75,7 @@ func DeleteTransaction(transaction *model.TransactionMerchant) string {
 	db := database.ConnectionDB()
 	db.Model(&transaction).Where("id = ?", transaction.Id).Update("active", false)
 	db.Model(&transaction).Where("id = ?", transaction.Id).Update("is_deleted", true)
+	transaction.Deleted = time.Now()
 	defer db.Close()
 	return "berhasil dihapus"
 }

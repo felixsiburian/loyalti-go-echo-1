@@ -18,11 +18,11 @@ func CreateVoucher(voucher *model.Voucher) string {
 		ModifiedBy:               "Admin",
 		Active:                   true,
 		IsDeleted:                false,
-		Deleted:                  nil,
+		Deleted:                  time.Time{},
 		DeletedBy:                "",
 		VoucherName:              voucher.VoucherName,
-		StartDate:                time.Time{},
-		EndDate:                  time.Time{},
+		StartDate:                voucher.StartDate,
+		EndDate:                  voucher.EndDate,
 		VoucherDescription:       voucher.VoucherDescription,
 		VoucherTermsAndCondition: voucher.VoucherTermsAndCondition,
 		IsPushNotification:       voucher.IsPushNotification,
@@ -60,6 +60,7 @@ func UpdateVoucher(voucher *model.Voucher) string {
 		"outlet_id":                   voucher.OutletId,
 		"program_id":                  voucher.ProgramId,
 	})
+	voucher.Modified = time.Now()
 	defer db.Close()
 	return "Update Berhasil"
 }
@@ -69,7 +70,7 @@ func DeleteVoucher(voucher *model.Voucher) string {
 	db := database.ConnectionDB()
 	db.Model(&voucher).Where("program_id = ?", voucher.ProgramId).Update("active", false)
 	db.Model(&voucher).Where("program_id = ?", voucher.ProgramId).Update("is_deleted", true)
-
+	voucher.Deleted = time.Now()
 	defer db.Close()
 	return "berhasil dihapus"
 }

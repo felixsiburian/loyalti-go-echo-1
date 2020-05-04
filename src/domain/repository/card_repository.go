@@ -44,7 +44,7 @@ func (p *card_repo) CreateCard(newcard *model.ProgramCard) error {
 		ModifiedBy:        "System",
 		Active:            true,
 		IsDeleted:         false,
-		Deleted:           nil,
+		Deleted:           time.Time{},
 		DeletedBy:         "",
 		Title:             newcard.Title,
 		Description:       newcard.Description,
@@ -53,7 +53,7 @@ func (p *card_repo) CreateCard(newcard *model.ProgramCard) error {
 		IconImage:         newcard.IconImage,
 		TermsAndCondition: newcard.TermsAndCondition,
 		Benefit:           newcard.Benefit,
-		ValidUntil:        time.Time{},
+		ValidUntil:        newcard.ValidUntil,
 		CurrentPoint:      newcard.CurrentPoint,
 		IsValid:           true,
 		ProgramId:         newcard.ProgramId,
@@ -149,7 +149,7 @@ func CreateCardMerchant(card *model.ProgramCard) string {
 		ModifiedBy:        "Admin",
 		Active:            true,
 		IsDeleted:         false,
-		Deleted:           nil,
+		Deleted:           time.Time{},
 		DeletedBy:         "",
 		Title:             card.Title,
 		Description:       card.Description,
@@ -158,7 +158,7 @@ func CreateCardMerchant(card *model.ProgramCard) string {
 		IconImage:         card.IconImage,
 		TermsAndCondition: card.TermsAndCondition,
 		Benefit:           card.Benefit,
-		ValidUntil:        time.Now(),
+		ValidUntil:        card.ValidUntil,
 		CurrentPoint:      card.CurrentPoint,
 		IsValid:           card.IsValid,
 		ProgramId:         card.ProgramId,
@@ -168,7 +168,6 @@ func CreateCardMerchant(card *model.ProgramCard) string {
 		ProgramName:       "a",
 		MerchantName:      "b",
 	}
-
 	if (cards.CardType != "Member") {
 		fmt.Println("masuk kesini")
 		db.Create(&cards)
@@ -183,7 +182,7 @@ func CreateCardMerchant(card *model.ProgramCard) string {
 				ModifiedBy:        "Admin",
 				Active:            true,
 				IsDeleted:         false,
-				Deleted:           nil,
+				Deleted:           time.Time{},
 				DeletedBy:         "",
 				Title:             card.Title,
 				Description:       card.Description,
@@ -192,7 +191,7 @@ func CreateCardMerchant(card *model.ProgramCard) string {
 				IconImage:         card.IconImage,
 				TermsAndCondition: card.TermsAndCondition,
 				Benefit:           card.Benefit,
-				ValidUntil:        time.Now(),
+				ValidUntil:        card.ValidUntil,
 				CurrentPoint:      card.CurrentPoint,
 				IsValid:           card.IsValid,
 				ProgramId:         card.ProgramId,
@@ -202,6 +201,8 @@ func CreateCardMerchant(card *model.ProgramCard) string {
 				ProgramName:       "a",
 				MerchantName:      "b",
 			}
+
+
 			if (i == 0) {
 				fmt.Println("masuk ke if == 0")
 				fmt.Println("isi enum silver", domain.EnumMember.Silver)
@@ -229,6 +230,7 @@ func CreateCardMerchant(card *model.ProgramCard) string {
 func UpdateCardMerchant(card *model.ProgramCard) error {
 	fmt.Println("masuk ke update")
 	db := database.ConnectionDB()
+	card.Modified = time.Now()
 	db.Model(&card).Updates(map[string]interface{}{
 		"title": card.Title,
 		"description": card.Description,
@@ -247,6 +249,7 @@ func UpdateCardMerchant(card *model.ProgramCard) error {
 		"tier": card.Tier,
 		"template_pattern": card.TemplatePattern,
 	})
+
 	//db.Model(&card).Update(&card)
 	db.Close()
 	return nil
@@ -255,6 +258,7 @@ func UpdateCardMerchant(card *model.ProgramCard) error {
 func DeleteCardMerchant(card *model.ProgramCard) error {
 	fmt.Println("masuk ke delete")
 	db := database.ConnectionDB()
+	card.Deleted = time.Now()
 	db.Model(&card).Where("id = ?", card.Id).Update("active", false)
 	db.Model(&card).Where("id = ?", card.Id).Update("is_deleted", true)
 

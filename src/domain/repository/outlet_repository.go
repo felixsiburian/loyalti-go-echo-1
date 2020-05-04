@@ -109,7 +109,7 @@ func CreateOutlet(outlet *model.Outlet2) string {
 		ModifiedBy:       "Admin",
 		Active:           true,
 		IsDeleted:        false,
-		Deleted:          nil,
+		Deleted:          time.Time{},
 		Deleted_by:       "",
 		OutletName:       outlet.OutletName,
 		OutletAddress:    outlet.OutletAddress,
@@ -119,8 +119,8 @@ func CreateOutlet(outlet *model.Outlet2) string {
 		OutletPostalCode: outlet.OutletPostalCode,
 		OutletLongitude:  outlet.OutletLongitude,
 		OutletLatitude:   outlet.OutletLatitude,
-		OutletDay:        time.Time{},
-		OutletHour:       time.Time{},
+		OutletDay:        outlet.OutletDay,
+		OutletHour:       outlet.OutletHour,
 		MerchantEmail:    outlet.MerchantEmail,
 		Timezone:         outlet.Timezone,
 		MerchantName:     "a",
@@ -147,6 +147,7 @@ func UpdateOutlet(outlet *model.Outlet2) string {
 		"merchant_email":outlet.MerchantEmail,
 		"timezone":outlet.Timezone,
 	})
+	outlet.Modified = time.Now()
 	defer db.Close()
 	return outlet.OutletName
 }
@@ -155,6 +156,7 @@ func DeleteOutlet(outlet *model.Outlet2) string {
 	db := database.ConnectionDB()
 	db.Model(&outlet).Where("id= ?", outlet.Id).Update("active", false)
 	db.Model(&outlet).Where("id= ?", outlet.Id).Update("is_deleted", true)
+	outlet.Deleted = time.Now()
 	defer db.Close()
 	return "berhasil dihapus"
 }

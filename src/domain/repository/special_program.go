@@ -85,12 +85,12 @@ func CreateSpecial(special *model.SpecialProgram) string {
 		ModifiedBy:            "Admin",
 		Active:                true,
 		IsDeleted:             false,
-		Deleted:               nil,
+		Deleted:               time.Time{},
 		Deleted_by:            "",
 		ProgramName:           special.ProgramName,
 		ProgramImage:          special.ProgramImage,
-		ProgramStartDate:      time.Time{},
-		ProgramEndDate:        time.Time{},
+		ProgramStartDate:      special.ProgramStartDate,
+		ProgramEndDate:        special.ProgramEndDate,
 		ProgramDescription:    special.ProgramDescription,
 		Card:                  special.Card,
 		OutletID:              special.OutletID,
@@ -142,6 +142,7 @@ func UpdateSpecial(special *model.SpecialProgram) string {
 		"is_give_card":             special.IsGiveCard,
 		"is_welcome_bonus":         special.IsWelcomeBonus,
 	})
+	special.Modified = time.Now()
 	defer db.Close()
 	return special.ProgramName
 }
@@ -150,6 +151,7 @@ func DeleteSpecial(special *model.SpecialProgram) string {
 	db := database.ConnectionDB()
 	db.Model(&special).Where("id = ?", special.Id).Update("active", false)
 	db.Model(&special).Where("id = ?", special.Id).Update("is_deleted", true)
+	special.Deleted = time.Now()
 	defer db.Close()
 	return "berhasil dihapus"
 }

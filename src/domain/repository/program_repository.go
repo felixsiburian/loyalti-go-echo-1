@@ -31,7 +31,7 @@ func (p *repoProgram) CreateProgram(newprogram *model.Program) error {
 		ModifiedBy:         "",
 		Active:             true,
 		IsDeleted:          false,
-		Deleted:            nil,
+		Deleted:            time.Time{},
 		Deleted_by:         "",
 		ProgramName:        newprogram.ProgramName,
 		ProgramImage:       newprogram.ProgramImage,
@@ -74,12 +74,12 @@ func CreateProgram(program *model.Program) string {
 		ModifiedBy:            "Admin",
 		Active:                true,
 		IsDeleted:             false,
-		Deleted:               nil,
+		Deleted:               time.Time{},
 		Deleted_by:            "",
 		ProgramName:           program.ProgramName,
 		ProgramImage:          program.ProgramImage,
-		ProgramStartDate:      time.Time{},
-		ProgramEndDate:        time.Time{},
+		ProgramStartDate:      program.ProgramStartDate,
+		ProgramEndDate:        program.ProgramEndDate,
 		ProgramDescription:    program.ProgramDescription,
 		Card:                  program.Card,
 		OutletID:              program.OutletID,
@@ -145,6 +145,7 @@ func UpdateProgram(program *model.Program) string {
 		"is_give_card":             program.IsGiveCard,
 		"is_welcome_bonus":         program.IsWelcomeBonus,
 	})
+	program.Modified = time.Now()
 	defer db.Close()
 	return "Berhasil diUpdate"
 }
@@ -162,6 +163,7 @@ func DeleteProgram(program *model.Program) string {
 	db := database.ConnectionDB()
 	db.Model(&program).Where("id= ?", program.Id).Update("active", false)
 	db.Model(&program).Where("id= ?", program.Id).Update("is_deleted", true)
+	program.Deleted = time.Now()
 	defer db.Close()
 	return "berhasil dihapus"
 }

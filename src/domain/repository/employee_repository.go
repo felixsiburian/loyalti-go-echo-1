@@ -29,7 +29,7 @@ func (p employee_repo) CreateEmployee(newemployee *model.Employee) error {
 		ModifiedBy:    "",
 		Active:        false,
 		IsDeleted:     false,
-		Deleted:       nil,
+		Deleted:       time.Time{},
 		Deleted_by:    "",
 		EmployeeName:  newemployee.EmployeeName,
 		EmployeeEmail: newemployee.EmployeeEmail,
@@ -62,7 +62,7 @@ func (p *employee_repo) UpdateEmployee(updateemployee *model.Employee) error {
 		ModifiedBy:    "",
 		Active:        true,
 		IsDeleted:     false,
-		Deleted:       nil,
+		Deleted:       time.Time{},
 		Deleted_by:    "",
 		EmployeeName:  updateemployee.EmployeeName,
 		EmployeeEmail: updateemployee.EmployeeEmail,
@@ -94,7 +94,7 @@ func CreateEmployee(employee *model.Employee) string {
 		ModifiedBy:    "Admin",
 		Active:        true,
 		IsDeleted:     false,
-		Deleted:       nil,
+		Deleted:       time.Time{},
 		Deleted_by:    "",
 		EmployeeName:  employee.EmployeeName,
 		EmployeeEmail: employee.EmployeeEmail,
@@ -111,6 +111,7 @@ func CreateEmployee(employee *model.Employee) string {
 func UpdateEmployee(employee *model.Employee) string {
 	db := database.ConnectionDB()
 	db.Model(&employee).Where("employee_email = ?", employee.EmployeeEmail).Update(&employee)
+	employee.Modified = time.Now()
 	defer db.Close()
 	return employee.EmployeeEmail
 }
@@ -119,6 +120,7 @@ func DeleteEmployee(employee *model.Employee) string {
 	db := database.ConnectionDB()
 	db.Model(&employee).Where("employee_email = ?", employee.EmployeeEmail).Update("active", false)
 	db.Model(&employee).Where("employee_email = ?", employee.EmployeeEmail).Update("is_deleted", true)
+	employee.Deleted = time.Now()
 
 	//db.Model(&employee).Where("employee_email = ?",employee.EmployeeEmail).Update("active", false)
 	defer db.Close()

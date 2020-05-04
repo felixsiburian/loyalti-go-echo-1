@@ -32,7 +32,7 @@ func (p *repo) CreateMerchant(newmerchant *model.Merchant) error {
 		ModifiedBy:            "",
 		Active:                true,
 		IsDeleted:             false,
-		Deleted:               nil,
+		Deleted:               time.Time{},
 		Deleted_by:            "",
 		MerchantName:          newmerchant.MerchantName,
 		MerchantEmail:         newmerchant.MerchantEmail,
@@ -70,7 +70,7 @@ func CreateMerchant2(newmerchant *model.Merchant) string {
 		ModifiedBy:            "",
 		Active:                true,
 		IsDeleted:             false,
-		Deleted:               nil,
+		Deleted:               time.Time{},
 		Deleted_by:            "",
 		MerchantName:          newmerchant.MerchantName,
 		MerchantEmail:         newmerchant.MerchantEmail,
@@ -86,6 +86,7 @@ func CreateMerchant2(newmerchant *model.Merchant) string {
 		MerchantImageProfile:  newmerchant.MerchantImageProfile,
 		MerchantGallery:       newmerchant.MerchantGallery,
 	}
+
 	db := database.ConnectionDB()
 	db.Create(&merchant)
 	defer db.Close()
@@ -101,7 +102,7 @@ func (p *repo) UpdateMerchant(newmerchant *model.Merchant) error {
 		ModifiedBy:            "",
 		Active:                true,
 		IsDeleted:             false,
-		Deleted:               nil,
+		Deleted:               time.Time{},
 		Deleted_by:            "",
 		MerchantName:          newmerchant.MerchantName,
 		MerchantEmail:         newmerchant.MerchantEmail,
@@ -130,7 +131,7 @@ func UpdateMerchant2(newmerchant *model.Merchant) string {
 		ModifiedBy:            "",
 		Active:                true,
 		IsDeleted:             false,
-		Deleted:               nil,
+		Deleted:               time.Time{},
 		Deleted_by:            "",
 		MerchantName:          newmerchant.MerchantName,
 		MerchantEmail:         newmerchant.MerchantEmail,
@@ -161,7 +162,7 @@ func (p *repo) DeleteMerchant(newmerchant *model.Merchant) error {
 		ModifiedBy:            "",
 		Active:                true,
 		IsDeleted:             false,
-		Deleted:               nil,
+		Deleted:               time.Time{},
 		Deleted_by:            "",
 		MerchantName:          newmerchant.MerchantName,
 		MerchantEmail:         newmerchant.MerchantEmail,
@@ -178,6 +179,7 @@ func (p *repo) DeleteMerchant(newmerchant *model.Merchant) error {
 		MerchantGallery:       newmerchant.MerchantGallery,
 	}
 	err := db.Model(&merchant).Where("merchant_email = ?", merchant.MerchantEmail).Update("active", false).Error
+	merchant.Modified = time.Now()
 	if err == nil {
 		fmt.Println("Tidak ada error")
 	}
@@ -193,7 +195,7 @@ func DeleteMerchant2(newmerchant *model.Merchant) string {
 		ModifiedBy:            "",
 		Active:                true,
 		IsDeleted:             false,
-		Deleted:               nil,
+		Deleted:               time.Time{},
 		Deleted_by:            "",
 		MerchantName:          newmerchant.MerchantName,
 		MerchantEmail:         newmerchant.MerchantEmail,
@@ -211,6 +213,7 @@ func DeleteMerchant2(newmerchant *model.Merchant) string {
 	}
 	db.Model(&merchant).Where("merchant_email = ?", merchant.MerchantEmail).Update("active", false)
 	db.Model(&merchant).Where("merchant_email = ?", merchant.MerchantEmail).Update("is_deleted", true)
+	merchant.Deleted = time.Now()
 	defer db.Close()
 	return "berhasil dihapus"
 }
