@@ -1,4 +1,4 @@
-package UploadToBlob
+package UploadImageProfile
 
 import (
 	"bytes"
@@ -9,12 +9,7 @@ import (
 	"os"
 )
 
-func Testku (c echo.Context) error {
-	c.FormFile("upload")
-	return nil
-}
-
-func ProcessImage(c echo.Context) error {
+func ProcessImageProfile(c echo.Context) error {
 	fmt.Println("masuk sini")
 	file, err := c.FormFile("upload")
 	email := c.FormValue("email")
@@ -40,7 +35,7 @@ func ProcessImage(c echo.Context) error {
 	}
 	fmt.Println(buf.Bytes())
 	fmt.Println("berhasil",dst)
-	UplodBytesToBlob(buf.Bytes(), email)
+	UplodBytesToBlobProfile(buf.Bytes(), email)
 	//fmt.Println("isi out : ", file)
 	//fmt.Println("isi in : ", buf)
 	//do other stuff

@@ -72,6 +72,7 @@ type NewMerchantCommand struct {
 	//MerchantPassword      string     `json:"merchant_password"`
 
 	CategoryName string `json:"category_name"`
+	Rating       int    `json:"rating"`
 }
 
 type Merchant struct {
@@ -99,13 +100,42 @@ type Merchant struct {
 	MerchantImageProfile  string    `json:"merchant_image_profile"`
 	MerchantGallery       string    `json:"merchant_gallery"`
 
-	CategoryName string `json:"category_name"`
+	CategoryName string  `json:"category_name"`
+	Rating       float32 `json:"rating"`
+}
+
+type Review struct {
+	Id            int       `gorm:"AUTO_INCREMENT;PRIMARY_KEY;NOT NULL"; json:"id"'`
+	Created       time.Time `json:"created"`
+	CreatedBy     string    `json:"created_by"`
+	Modified      time.Time `json:"modified"`
+	ModifiedBy    string    `json:"modified_by"`
+	Active        bool      `json:"active"`
+	IsDeleted     bool      `json:"is_deleted"`
+	Deleted       time.Time `json:"deleted"`
+	Deleted_by    string    `json:"deleted_by"`
+	CustomerName  string    `json:"customer_name"`
+	MerchantEmail string    `json:"merchant_email"`
+	ProgramName   string    `json:"program_name"`
+	Review        string    `json:"review"`
+	Rating        float32   `json:"rating"`
+	MerchantName  string    `json:"merchant_name"`
+}
+
+type ImageProfile struct {
+	Id            int    `json:"id"`
+	MerchantEmail string `gorm:PRIMARY_KEY;json:"merchant_email"`
+	Link          string `json:"link"`
 }
 
 type Gallery struct {
 	Id             int    `gorm:"AUTO_INCREMENT;PRIMARY_KEY;NOT NULL"; json:"id"'`
 	Merchant_email string `json:"merchant_email"`
 	Link           string `json:"link"`
+}
+
+type GalleryCommand struct {
+	Link []string `json:"link"`
 }
 
 type MerchantCategory struct {
@@ -209,9 +239,10 @@ type Program struct {
 	IsGiveCard            bool      `json:"is_give_card"`
 	IsWelcomeBonus        bool      `json:"is_welcome_bonus"`
 
-	MerchantName string `json:"merchant_name"`
-	OutletName   string `json:"outlet_name"`
-	CategoryName string `json:"category_name"`
+	MerchantName string  `json:"merchant_name"`
+	OutletName   string  `json:"outlet_name"`
+	CategoryName string  `json:"category_name"`
+	Rating       float32 `json:"rating"`
 }
 
 type SpecialProgram struct {
@@ -246,9 +277,10 @@ type SpecialProgram struct {
 	IsGiveCard            bool      `json:"is_give_card"`
 	IsWelcomeBonus        bool      `json:"is_welcome_bonus"`
 
-	MerchantName string `json:"merchant_name"`
-	OutletName   string `json:"outlet_name"`
-	CategoryName string `json:"category_name"`
+	MerchantName string  `json:"merchant_name"`
+	OutletName   string  `json:"outlet_name"`
+	CategoryName string  `json:"category_name"`
+	Rating       float32 `json:"rating"`
 }
 
 type Product struct {

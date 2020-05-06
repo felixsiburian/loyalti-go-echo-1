@@ -17,5 +17,5 @@ func StartKafka() {
 	go consumer.NewVoucherConsumer()
 	go consumer.NewRewardConsumer()
 	go consumer.NewSendEmailConsumer()
-
+	go consumer.NewReviewConsumer()
 }

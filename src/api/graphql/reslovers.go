@@ -599,3 +599,49 @@ func RewardResolver(p graphql.ResolveParams) (interface{}, error) {
 	voucher := repository.GetReward(nil, nil, nil, nil)
 	return voucher, nil
 }
+
+func ReviewResolver(p graphql.ResolveParams) (interface{}, error) {
+	fmt.Println("masuk ke review resolver")
+	page, ok := p.Args["page"].(int)
+	size, sip := p.Args["size"].(int)
+	sort, top := p.Args["sort"].(int)
+	program_name, name := p.Args["program_name"].(string)
+
+	if ok && sip && top && name {
+		var pages *int = &page
+		var sizes *int = &size
+		var sorts *int = &sort
+		var names *string = &program_name
+		review := repository.GetReview(pages, sizes, sorts, names)
+		fmt.Println(review)
+		return review, nil
+	}
+
+	if ok && sip && top {
+		var pages *int = &page
+		var sizes *int = &size
+		var sorts *int = &sort
+		review := repository.GetReview(pages, sizes, sorts, nil)
+		fmt.Println(review)
+		return review, nil
+	}
+
+	if ok && sip {
+		var pages *int = &page
+		var sizes *int = &size
+		review := repository.GetReview(pages, sizes, nil, nil)
+		fmt.Println(review)
+		return review, nil
+	}
+
+	if name {
+		var names *string = &program_name
+		review := repository.GetReview(nil, nil, nil, names)
+		fmt.Println(review)
+		return review, nil
+	}
+
+
+	review := repository.GetReview(nil, nil, nil, nil)
+	return review, nil
+}

@@ -1,4 +1,4 @@
-package UploadToBlob
+package UploadImageProfile
 
 import (
 	"context"
@@ -11,30 +11,30 @@ import (
 	"time"
 )
 
-func GetAccountInfo()(string, string, string, string){
+func GetAccountInfos()(string, string, string, string){
 	azrKey := "194MUKH8BxaH4xasKSVedJgS6mLR6FLVbxVYbZLii13ZI5WnN308xIZBRcHsarw8nn+D5+O3p15r7BdtWHHQTw=="
 	fmt.Println("azrKey : ", azrKey)
 	azrBlobAccountName := "loyaltiexpress"
 	fmt.Println("azrAccount : ", azrBlobAccountName)
-	azrBlobContainer := "loyalti-images"
+	azrBlobContainer := "loyalti-profile-images"
 	fmt.Println("azrContainer : ", azrBlobContainer)
 	azrPrimaryBlobServiceEndpoint := fmt.Sprintf("https://%s.blob.core.windows.net/", azrBlobAccountName)
 	fmt.Println(azrPrimaryBlobServiceEndpoint)
 	return azrKey, azrBlobAccountName, azrPrimaryBlobServiceEndpoint, azrBlobContainer
 }
 
-func GetBlobName() string {
+func GetBlobsName() string {
 	t := time.Now()
 	uuid, _ := uuid.NewV4()
 
 	return fmt.Sprintf("image_%s-%v.jpg", t.Format("20060102"), uuid)
 }
 
-func UplodBytesToBlob(b []byte, email string)(string, error) {
+func UplodBytesToBlobProfile(b []byte, email string)(string, error) {
 	db := database.ConnectionDB()
 	fmt.Println("masuk kesini")
-	azrKey, accountName, endPoint, container := GetAccountInfo()
-	u, err := url.Parse(fmt.Sprint(endPoint, container, "/", GetBlobName()))
+	azrKey, accountName, endPoint, container := GetAccountInfos()
+	u, err := url.Parse(fmt.Sprint(endPoint, container, "/", GetBlobsName()))
 
 	fmt.Println("U : ", u  )
 	if err != nil {
@@ -61,12 +61,14 @@ func UplodBytesToBlob(b []byte, email string)(string, error) {
 	if errU != nil {
 		fmt.Println("Erorr Upload ", errU.Error())
 	}
-	image := model.Gallery{
-		Merchant_email: email,
+
+	//Insert to DB Gallery
+	image := model.ImageProfile{
+		MerchantEmail: 	email,
 		Link:           blockBlobUrl.String(),
 	}
-	fmt.Println("Data : ",image)
-	//images = append(images, image)
+	fmt.Println(image)
+
 	db.Create(&image)
 	//var bloburl = azblob
 	db.Close()

@@ -2,6 +2,8 @@ package router
 
 import (
 	"fmt"
+	"github.com/radyatamaa/loyalti-go-echo/src/api/UploadImageProfile"
+	"github.com/radyatamaa/loyalti-go-echo/src/api/apiKafka/Review"
 	"github.com/radyatamaa/loyalti-go-echo/src/api/apiKafka/SendEmail"
 	"github.com/spf13/viper"
 
@@ -99,6 +101,11 @@ func New() *echo.Echo {
 	e.POST("/update-reward", Reward.PublishUpdateReward)
 	e.POST("/delete-reward", Reward.PublishDeleteReward)
 
+	//Kafka Review
+	e.POST("/create-review", Review.PublishCreateReview)
+	e.POST("/update-review", Review.PublishUpdateReview)
+	e.POST("/delete-review", Review.PublishDeleteReview)
+
 	//Kafka Customer By admin
 	//Get Token
 	//e.Use(middleware.BasicAuth(func(username, password string, c echo.Context) (bool, error) {
@@ -125,6 +132,8 @@ func New() *echo.Echo {
 	//Post Image to Blob
 	fmt.Println("masuk ini")
 	e.POST("/upload", UploadToBlob.ProcessImage)
+	e.POST("/UploadProfileImage", UploadImageProfile.ProcessImageProfile)
+	e.POST("/UpdateProfileImage", UploadImageProfile.ProcessUpdateImageProfile)
 	fmt.Println("masuk ini")
 
 	//Send Mail SendGrid

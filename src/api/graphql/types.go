@@ -106,6 +106,9 @@ var merchantType = graphql.NewObject(graphql.ObjectConfig{
 		"category_name": &graphql.Field{
 			Type: graphql.String,
 		},
+		"rating": &graphql.Field{
+			Type: graphql.Float,
+		},
 	},
 })
 
@@ -115,7 +118,7 @@ var merchantCommandType = graphql.NewObject(graphql.ObjectConfig{
 		"id": &graphql.Field{
 			Type: graphql.Int,
 		},
-		"created": &graphql.Field{
+	"created": &graphql.Field{
 			Type: graphql.DateTime,
 		},
 		"created_by": &graphql.Field{
@@ -183,6 +186,9 @@ var merchantCommandType = graphql.NewObject(graphql.ObjectConfig{
 		},
 		"category_name": &graphql.Field{
 			Type: graphql.String,
+		},
+		"rating": &graphql.Field{
+			Type: graphql.Float,
 		},
 	},
 })
@@ -419,6 +425,9 @@ var programType = graphql.NewObject(graphql.ObjectConfig{
 		"category_name": &graphql.Field{
 			Type: graphql.String,
 		},
+		"rating": &graphql.Field{
+			Type: graphql.Float,
+		},
 	},
 })
 
@@ -500,6 +509,24 @@ var specialprogramType = graphql.NewObject(graphql.ObjectConfig{
 		"qr_code_id": &graphql.Field{
 			Type: graphql.String,
 		},
+		"is_req_bill_number": &graphql.Field{
+			Type: graphql.Boolean,
+		},
+		"is_req_total_transaction": &graphql.Field{
+			Type: graphql.Boolean,
+		},
+		"is_push_notification": &graphql.Field{
+			Type: graphql.Boolean,
+		},
+		"is_lend_card": &graphql.Field{
+			Type: graphql.Boolean,
+		},
+		"is_give_card": &graphql.Field{
+			Type: graphql.Boolean,
+		},
+		"is_welcome_bonus": &graphql.Field{
+			Type: graphql.Boolean,
+		},
 		"merchant_name": &graphql.Field{
 			Type: graphql.String,
 		},
@@ -508,6 +535,9 @@ var specialprogramType = graphql.NewObject(graphql.ObjectConfig{
 		},
 		"category_name": &graphql.Field{
 			Type: graphql.String,
+		},
+		"rating": &graphql.Field{
+			Type: graphql.Float,
 		},
 	},
 })
@@ -979,6 +1009,57 @@ var reward = graphql.NewObject(graphql.ObjectConfig{
 		},
 		"outlet_name": &graphql.Field{
 			Type: graphql.String,
+		},
+	},
+})
+
+var review = graphql.NewObject(graphql.ObjectConfig{
+	Name: "Review",
+	Fields: graphql.Fields{
+		"id": &graphql.Field{
+			Type: graphql.Int,
+		},
+		"created": &graphql.Field{
+			Type: graphql.DateTime,
+		},
+		"created_by": &graphql.Field{
+			Type: graphql.String,
+		},
+		"modified": &graphql.Field{
+			Type: graphql.DateTime,
+		},
+		"modified_by": &graphql.Field{
+			Type: graphql.String,
+		},
+		"active": &graphql.Field{
+			Type: graphql.Boolean,
+		},
+		"is_deleted": &graphql.Field{
+			Type: graphql.Boolean,
+		},
+		"deleted": &graphql.Field{
+			Type: graphql.DateTime,
+		},
+		"deleted_by": &graphql.Field{
+			Type: graphql.String,
+		},
+		"customer_name": &graphql.Field{
+			Type : graphql.String,
+		},
+		"merchant_email": &graphql.Field{
+			Type : graphql.String,
+		},
+		"program_name": &graphql.Field{
+			Type : graphql.String,
+		},
+		"review": &graphql.Field{
+			Type : graphql.String,
+		},
+		"rating": &graphql.Field{
+			Type : graphql.Int,
+		},
+		"merchant_name": &graphql.Field{
+			Type : graphql.String,
 		},
 	},
 })

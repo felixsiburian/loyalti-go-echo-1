@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"strconv"
 	"time"
 
 	"github.com/jinzhu/gorm"
@@ -111,6 +112,7 @@ func CreateSpecial(special *model.SpecialProgram) string {
 		MerchantName:          "a",
 		OutletName:            "b",
 		CategoryName:          "c",
+		Rating: 0,
 	}
 	db.Create(&specialObj)
 	defer db.Close()
@@ -166,6 +168,7 @@ func GetSpecialProgram(page *int, size *int, sort *int, category *int, email *st
 	if page == nil && size == nil && sort == nil && category == nil && email == nil {
 		fmt.Println("masuk if 1")
 		rows, err = db.Find(&program).Rows()
+		fmt.Println("program : ", program)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -276,72 +279,93 @@ func GetSpecialProgram(page *int, size *int, sort *int, category *int, email *st
 	}
 
 	result := make([]model.SpecialProgram, 0)
-
-	for rows.Next() {
-		t := &model.SpecialProgram{}
-		fmt.Println(t)
-
-		err = rows.Scan(
-			&t.Id,
-			&t.Created,
-			&t.CreatedBy,
-			&t.Modified,
-			&t.ModifiedBy,
-			&t.Active,
-			&t.IsDeleted,
-			&t.Deleted,
-			&t.Deleted_by,
-			&t.ProgramName,
-			&t.ProgramImage,
-			&t.ProgramStartDate,
-			&t.ProgramEndDate,
-			&t.ProgramDescription,
-			&t.Card,
-			&t.OutletID,
-			&t.MerchantEmail,
-			&t.CategoryId,
-			&t.Benefit,
-			&t.TermsAndCondition,
-			&t.Tier,
-			&t.RedeemRules,
-			&t.RewardTarget,
-			&t.QRCodeId,
-			&t.IsReqBillNumber,
-			&t.IsReqTotalTransaction,
-			&t.IsPushNotification,
-			&t.IsLendCard,
-			&t.IsGiveCard,
-			&t.IsWelcomeBonus,
-		)
+	for rows.Next(){
+		s := &model.SpecialProgram{}
+		fmt.Println(s)
+		err := rows.Scan(
+			&s.Id,
+			&s.Created,
+			&s.CreatedBy,
+			&s.Modified,
+			&s.ModifiedBy,
+			&s.Active,
+			&s.IsDeleted,
+			&s.Deleted,
+			&s.Deleted_by,
+			&s.ProgramName,
+			&s.ProgramImage,
+			&s.ProgramStartDate,
+			&s.ProgramEndDate,
+			&s.ProgramDescription,
+			&s.Card,
+			&s.OutletID,
+			&s.MerchantEmail,
+			&s.CategoryId,
+			&s.Benefit,
+			&s.TermsAndCondition,
+			&s.Tier,
+			&s.RedeemRules,
+			&s.RewardTarget,
+			&s.QRCodeId,
+			&s.IsReqBillNumber,
+			&s.IsReqTotalTransaction,
+			&s.IsPushNotification,
+			&s.IsLendCard,
+			&s.IsGiveCard,
+			&s.IsWelcomeBonus,
+			&s.MerchantName,
+			&s.OutletName,
+			&s.CategoryName,
+			&s.Rating,
+			)
 
 		merchant := new(model.Merchant)
 		db.Table("merchants").
 			Select("merchants.merchant_name").
-			Where("merchant_email = ?", t.MerchantEmail).
+			Where("merchant_email = ?", s.MerchantEmail).
 			First(&merchant)
-		t.MerchantName = merchant.MerchantName
+		s.MerchantName = merchant.MerchantName
 
 		category := new (model.MerchantCategory)
-
 		db.Table("merchant_categories").
 			Select("merchant_categories.category_name").
-			Where("id = ? ", t.CategoryId).
+			Where("id = ? ", s.CategoryId).
 			First(&category)
-		t.CategoryName = category.CategoryName
+		s.CategoryName = category.CategoryName
 
 		outlet := new (model.Outlet2)
-
-		db.Table("outlets").
-			Select("outlets.outlet_name").
-			Where("id = ? ", t.OutletID).
+		db.Table("outlet2").
+			Select("outlet2.outlet_name").
+			Where("id = ? ", s.OutletID).
 			First(&outlet)
-		t.OutletName = outlet.OutletName
+		s.OutletName = outlet.OutletName
+
+		var review []model.Review
+		var rate float32
+		var total float32
+		db.Table("reviews").Select("reviews.rating").
+			Where("program_name = ? ", s.ProgramName).Find(&review)
+		fmt.Println("Review : ", review)
+		for _, value := range review{
+			rate = rate + value.Rating
+			leng := float32(len(review))
+			total = rate / leng
+		}
+		totals := fmt.Sprintf("%.1f", total)
+		rates, err := strconv.ParseFloat(totals, 32)
+		ratess := float32(rates)
+		if err != nil {
+			log.Fatal(err)
+		}
+		s.Rating = ratess
+		fmt.Println("total : ", s.Rating)
+		fmt.Println("rate : ", rate)
 
 		if err != nil {
 			log.Fatal(err)
 			return nil
 		}
-		result = append(result,*t)
+		result = append(result,*s)
 	}
 	db.Close()
 	return result

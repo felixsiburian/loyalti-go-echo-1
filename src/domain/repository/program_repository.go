@@ -8,6 +8,7 @@ import (
 	"github.com/radyatamaa/loyalti-go-echo/src/domain/model"
 	"github.com/sirupsen/logrus"
 	"log"
+	"strconv"
 	"time"
 )
 
@@ -102,6 +103,7 @@ func CreateProgram(program *model.Program) string {
 		MerchantName:          "a",
 		OutletName:            "b",
 		CategoryName:          "c",
+		Rating:                0,
 	}
 	db.Create(&programObj)
 	defer db.Close()
@@ -554,10 +556,10 @@ func GetProgram(page *int, size *int, sort *int, category *int, email *string) [
 			&t.MerchantName,
 			&t.OutletName,
 			&t.CategoryName,
+			&t.Rating,
 		)
 		//add alert
 		merchant := new(model.Merchant)
-
 		db.Table("merchants").
 			Select("merchants.merchant_name").
 			Where("merchant_email = ?", t.MerchantEmail).
@@ -565,7 +567,6 @@ func GetProgram(page *int, size *int, sort *int, category *int, email *string) [
 		t.MerchantName = merchant.MerchantName
 
 		category := new(model.MerchantCategory)
-
 		db.Table("merchant_categories").
 			Select("merchant_categories.category_name").
 			Where("id = ? ", t.CategoryId).
@@ -573,12 +574,32 @@ func GetProgram(page *int, size *int, sort *int, category *int, email *string) [
 		t.CategoryName = category.CategoryName
 
 		outlet := new(model.Outlet2)
-
 		db.Table("outlet2").
 			Select("outlet2.outlet_name").
 			Where("id = ? ", t.OutletID).
 			First(&outlet)
 		t.OutletName = outlet.OutletName
+
+		var review []model.Review
+		var rate float32
+		var total float32
+		db.Table("reviews").Select("reviews.rating").
+		Where("program_name = ? ", t.ProgramName).Find(&review)
+		fmt.Println("Review : ", review)
+		for _, value := range review{
+			rate = rate + value.Rating
+			leng := float32(len(review))
+			total = rate / leng
+		}
+		totals := fmt.Sprintf("%.1f", total)
+		rates, err := strconv.ParseFloat(totals, 32)
+		ratess := float32(rates)
+		if err != nil {
+			log.Fatal(err)
+		}
+		t.Rating = ratess
+		fmt.Println("total : ", t.Rating)
+		fmt.Println("rate : ", rate)
 
 		if err != nil {
 			logrus.Error(err)

@@ -107,9 +107,9 @@ func NewRoot() *Root {
 
 					"province": &graphql.Field{
 						Type: graphql.NewList(provinceType),
-						Args:graphql.FieldConfigArgument{
+						Args: graphql.FieldConfigArgument{
 							"page": &graphql.ArgumentConfig{
-								Type:graphql.Int,
+								Type: graphql.Int,
 							},
 							"size": &graphql.ArgumentConfig{
 								Type: graphql.Int,
@@ -123,9 +123,9 @@ func NewRoot() *Root {
 
 					"city": &graphql.Field{
 						Type: graphql.NewList(cityType),
-						Args:graphql.FieldConfigArgument{
+						Args: graphql.FieldConfigArgument{
 							"page": &graphql.ArgumentConfig{
-								Type:graphql.Int,
+								Type: graphql.Int,
 							},
 							"size": &graphql.ArgumentConfig{
 								Type: graphql.Int,
@@ -193,7 +193,7 @@ func NewRoot() *Root {
 								Type: graphql.Int,
 							},
 							"email": &graphql.ArgumentConfig{
-									Type: graphql.String,
+								Type: graphql.String,
 							},
 						},
 						Resolve: OutletResolver,
@@ -286,14 +286,14 @@ func NewRoot() *Root {
 								Type: graphql.Int,
 							},
 							"card_type": &graphql.ArgumentConfig{
-									Type:graphql.String,
+								Type: graphql.String,
 							},
 						},
 						Resolve: CardResolver,
 					},
 					"voucher": &graphql.Field{
-						Type:graphql.NewList(voucher),
-						Args:graphql.FieldConfigArgument{
+						Type: graphql.NewList(voucher),
+						Args: graphql.FieldConfigArgument{
 							"page": &graphql.ArgumentConfig{
 								Type: graphql.Int,
 							},
@@ -307,11 +307,11 @@ func NewRoot() *Root {
 								Type: graphql.Int,
 							},
 						},
-						Resolve:VoucherResolver,
+						Resolve: VoucherResolver,
 					},
 					"reward": &graphql.Field{
-						Type:graphql.NewList(reward),
-						Args:graphql.FieldConfigArgument{
+						Type: graphql.NewList(reward),
+						Args: graphql.FieldConfigArgument{
 							"page": &graphql.ArgumentConfig{
 								Type: graphql.Int,
 							},
@@ -325,7 +325,25 @@ func NewRoot() *Root {
 								Type: graphql.String,
 							},
 						},
-						Resolve:RewardResolver,
+						Resolve: RewardResolver,
+					},
+					"review": &graphql.Field{
+						Type: graphql.NewList(review),
+						Args: graphql.FieldConfigArgument{
+							"page": &graphql.ArgumentConfig{
+								Type: graphql.Int,
+							},
+							"size": &graphql.ArgumentConfig{
+								Type: graphql.Int,
+							},
+							"sort": &graphql.ArgumentConfig{
+								Type: graphql.Int,
+							},
+							"program_name": &graphql.ArgumentConfig{
+								Type: graphql.String,
+							},
+						},
+						Resolve: ReviewResolver,
 					},
 				},
 			},
